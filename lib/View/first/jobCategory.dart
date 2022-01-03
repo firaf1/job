@@ -1,18 +1,28 @@
 import 'package:flutter/material.dart';
+import 'package:techino_app/Controller/Job_controller.dart';
 import 'package:techino_app/intro/utilities/styles.dart';
 
 class JobCategory extends StatefulWidget {
-  const JobCategory({Key? key}) : super(key: key);
+   
 
   @override
   _JobCategoryState createState() => _JobCategoryState();
 }
 
 class _JobCategoryState extends State<JobCategory> {
+  late int num1;
+  JobContorller jobContorller = new JobContorller();
+  @override
+  void initState() {
+    jobContorller.fetchJobsCategory().then((value) => setState(() {
+          jobContorller.isLoading = false;
+          // jobContorller.jobs_category.addAll(jobContorller.jobs_category);
+        
+        }));
+  }
+
   @override
   Widget build(BuildContext context) {
-    final width = MediaQuery.of(context).size.width;
-    final height = MediaQuery.of(context).size.height;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -20,7 +30,7 @@ class _JobCategoryState extends State<JobCategory> {
           margin: EdgeInsets.only(top: 10, left: 15, bottom: 8),
           padding: EdgeInsets.symmetric(vertical: 8, horizontal: 20),
           decoration: BoxDecoration(
-            color: Color(0xFFf9ebda),
+            color: secondary.color,
             borderRadius: BorderRadius.circular(10),
           ),
           child: Text(
@@ -28,6 +38,7 @@ class _JobCategoryState extends State<JobCategory> {
             style: TextStyle(
               color: primary.color,
               fontSize: 18,
+              fontWeight: FontWeight.bold,
             ),
           ),
         ),
@@ -44,7 +55,7 @@ class _JobCategoryState extends State<JobCategory> {
           height: MediaQuery.of(context).size.height / 1.4,
           width: double.infinity,
           child: ListView.builder(
-              itemCount: 8,
+              itemCount: jobContorller.jobs_category.length,
               scrollDirection: Axis.vertical,
               itemBuilder: (BuildContext context, int index) {
                 return Container(
@@ -72,7 +83,7 @@ class _JobCategoryState extends State<JobCategory> {
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(10),
                           image: DecorationImage(
-                            image: AssetImage('assets/images/677379.jpg'),
+                            image: AssetImage('assets/images/jj.jpg'),
                             fit: BoxFit.cover,
                           ),
                         ),
@@ -83,7 +94,7 @@ class _JobCategoryState extends State<JobCategory> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'Accounting And Finance',
+                              jobContorller.jobs_category[index].name,
                               overflow: TextOverflow.ellipsis,
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
@@ -91,7 +102,9 @@ class _JobCategoryState extends State<JobCategory> {
                               ),
                             ),
                             Text(
-                              '41 jobs'.toLowerCase(),
+                              jobContorller.jobs_category[index].totalJobs
+                                  .toString()
+                                  .toLowerCase(),
                               style: TextStyle(
                                 color: Color(0xFFbacdcb),
                                 fontSize: 15,

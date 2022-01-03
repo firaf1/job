@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:techino_app/first/mainScreen.dart';
+import 'package:techino_app/mainScreen.dart';
 import 'package:techino_app/intro/utilities/styles.dart';
 
 class OnboardingScreen extends StatefulWidget {
