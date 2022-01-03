@@ -33,6 +33,8 @@ class _Main_Jobs_ScreenState extends State<Main_Jobs_Screen> {
         }));
   }
 
+  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -66,10 +68,11 @@ class _Main_Jobs_ScreenState extends State<Main_Jobs_Screen> {
                           children: [
                             InkWell(
                               onTap: () {
-                                jobContorller.fetchJobs();
                                 setState(() {
+                                  jobContorller.isLoaded = false;
                                   Active_bar = -1;
                                 });
+                                jobContorller.fetchJobs();
                               },
                               child: Container(
                                 padding: EdgeInsets.symmetric(horizontal: 10),
@@ -97,12 +100,19 @@ class _Main_Jobs_ScreenState extends State<Main_Jobs_Screen> {
                             ),
                             InkWell(
                               onTap: () {
-                                jobContorller.fetchJobs(
-                                    category:
-                                        jobContorller.jobs_category[index].id);
                                 setState(() {
-                                  Active_bar = index;
+                                  jobContorller.isLoaded = false;
                                 });
+                                jobContorller
+                                    .fetchJobs(
+                                        category: jobContorller
+                                            .jobs_category[index].id)
+                                    .then((value) => setState(() {
+                                          jobContorller.isLoaded = true;
+
+                                          // jobContorller.jobs_category.addAll(jobContorller.jobs_category);
+                                          Active_bar = index;
+                                        }));
                               },
                               child: Stack(
                                 alignment: Alignment.topRight,
@@ -159,12 +169,19 @@ class _Main_Jobs_ScreenState extends State<Main_Jobs_Screen> {
                         )
                       : InkWell(
                           onTap: () {
-                            jobContorller.fetchJobs(
-                                category:
-                                    jobContorller.jobs_category[index].id);
                             setState(() {
-                              Active_bar = index;
+                              jobContorller.isLoaded = false;
                             });
+                            jobContorller
+                                .fetchJobs(
+                                    category:
+                                        jobContorller.jobs_category[index].id)
+                                .then((value) => setState(() {
+                                      jobContorller.isLoaded = true;
+
+                                      // jobContorller.jobs_category.addAll(jobContorller.jobs_category);
+                                      Active_bar = index;
+                                    }));
                           },
                           child: Stack(
                             alignment: Alignment.topRight,

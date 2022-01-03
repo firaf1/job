@@ -81,6 +81,7 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
         ],
       ),
       appBar: AppBar(
+        
         brightness: Brightness.light,
         backwardsCompatibility: false,
         systemOverlayStyle: SystemUiOverlayStyle(statusBarColor: primary.color),

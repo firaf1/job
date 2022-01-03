@@ -354,7 +354,7 @@ class _SignupState extends State<Signup> {
                         child: TextFormField(
                           validator: (value) {
                             if (value!.isEmpty ) {
-                              if(password .isEmpty)
+                               
                               if (value.isEmpty) {
                                 setState(() {
                                   passwordConfirmMessage =
