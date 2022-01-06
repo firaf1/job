@@ -41,14 +41,14 @@ class _JobsListState extends State<JobsList> {
               height: 100,
               width: double.infinity,
               decoration: BoxDecoration(
-                // boxShadow: [
-                //   BoxShadow(
-                //     color: Color.fromRGBO(157, 157, 157, 1),
-                //     offset: Offset(0, 0.5),
-                //     spreadRadius: 5,
-                //     blurRadius: 8,
-                //   )
-                // ],
+                boxShadow: [
+                  BoxShadow(
+                    color: Color(0xFFc5c5c5),
+                    offset: Offset(0, 0.5),
+                    spreadRadius: 5,
+                    blurRadius: 8,
+                  )
+                ],
                 borderRadius: BorderRadius.circular(10),
                 color: Colors.white,
               ),

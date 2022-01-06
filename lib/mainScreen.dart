@@ -2,7 +2,7 @@ import 'package:bottom_navy_bar/bottom_navy_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:techino_app/Auth/Login/login.dart';
+import 'package:techino_app/View/Auth/Login/login.dart';
 import 'package:techino_app/Controller/Job_controller.dart';
 import 'package:techino_app/Model/Jobs_category.dart';
 import 'package:techino_app/View/Profile/profile.dart';
