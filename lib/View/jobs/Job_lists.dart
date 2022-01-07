@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:techino_app/Model/Jobs.dart';
 import 'package:techino_app/View/jobs/job_detail.dart';
@@ -72,13 +73,19 @@ class _JobsListState extends State<JobsList> {
                             width: 50,
                             margin: EdgeInsets.only(top: 13, left: 8),
                             decoration: BoxDecoration(
-                              image: DecorationImage(
-                                image: NetworkImage(
-                                    widget.jobs_list[index1].imagePath),
-                                fit: BoxFit.cover,
-                              ),
-                              color: Colors.red,
+                              color: Colors.white,
                               borderRadius: BorderRadius.circular(30),
+                            ),
+                            child: ClipRRect(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(50.0)),
+                              child: CachedNetworkImage(
+                                fit: BoxFit.cover,
+                                imageUrl: widget.jobs_list[index1].imagePath,
+                                placeholder: (context, url) => Center(
+                                    child: CircularProgressIndicator(
+                                        color: primary.color)),
+                              ),
                             ),
                           ),
                         ],

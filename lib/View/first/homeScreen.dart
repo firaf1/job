@@ -1,3 +1,4 @@
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
@@ -77,9 +78,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                           ),
                         ),
-                        Sponser(
-                          ads: adController.ad,
-                        ),
+                        Sponser(ads: adController.ad),
 
                         //Ad Card
 

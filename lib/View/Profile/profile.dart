@@ -381,7 +381,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
               },
               child: Container(
                 padding: EdgeInsets.symmetric(horizontal: 20),
-                margin: EdgeInsets.only(top: 10, left: 35, right: 35),
+                margin:
+                    EdgeInsets.only(top: 10, left: 35, bottom: 30, right: 35),
                 height: 50,
                 width: MediaQuery.of(context).size.width - 70,
                 decoration: BoxDecoration(

@@ -57,11 +57,11 @@ class Top_Card extends StatelessWidget {
           ),
         ),
         Positioned(
-          bottom: 15,
+          bottom: 10,
           child: Container(
-            padding: EdgeInsets.only(left: 10),
-            margin: EdgeInsets.only(top: 0),
-            height: 45,
+            padding: EdgeInsets.only(left: 15, top: 2, bottom: 5),
+            margin: EdgeInsets.only(top: 10),
+            height: 55,
             width: MediaQuery.of(context).size.width / 1.2,
             decoration: BoxDecoration(
               color: Color(0xFFFFFFFF),
@@ -76,6 +76,10 @@ class Top_Card extends StatelessWidget {
               borderRadius: BorderRadius.circular(10),
             ),
             child: TextField(
+              style: TextStyle(
+                color: primary.color,
+                fontSize: 18,
+              ),
               decoration: InputDecoration(
                 suffixIcon: Icon(
                   Icons.search,

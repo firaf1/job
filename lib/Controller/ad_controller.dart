@@ -8,9 +8,11 @@ class AdController {
   List<RandomAd> ad = [];
   bool isServerError = false;
   fetchAds() async {
+    ad = [];
     try {
       var request = await http.get(Uri.parse("$url/random-ads"));
       List<RandomAd> temp = [];
+
       if (request.statusCode == 200) {
         var response = json.decode(request.body);
         print(response);
@@ -19,12 +21,13 @@ class AdController {
         }
 
         ad.addAll(temp);
+        print('${ad.length} in controller');
       } else {
         this.isServerError = true;
         print("Fail ad if not 200");
       }
     } catch (e) {
-       this.isServerError = true;
+      this.isServerError = true;
       print('ad try fail');
     }
   }

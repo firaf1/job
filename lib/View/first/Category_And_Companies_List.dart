@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:techino_app/Controller/Job_controller.dart';
 import 'package:techino_app/Model/Jobs_category.dart';
@@ -103,27 +104,33 @@ class _CompaniesListState extends State<CompaniesList>
                             Stack(
                               alignment: AlignmentDirectional.topEnd,
                               children: [
-                                Container(
-                                  height: 130,
-                                  width: 200,
-                                  decoration: BoxDecoration(
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: Color(0xFFbacdcb),
-                                        blurRadius: 3,
-                                        spreadRadius: 2,
-                                        offset: Offset(0, 0.5),
-                                      )
-                                    ],
-                                    borderRadius: BorderRadius.circular(15),
-                                    image: DecorationImage(
-                                      image: NetworkImage(
-                                        widget.comp_list[index].imagePath,
-                                      ),
-                                      fit: BoxFit.cover,
+                                if (widget.comp_list[index].imagePath !=
+                                    "Some Image path")
+                                  Container(
+                                    height: 130,
+                                    width: 200,
+                                    decoration: BoxDecoration(
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: Color(0xFFbacdcb),
+                                          blurRadius: 3,
+                                          spreadRadius: 2,
+                                          offset: Offset(0, 0.5),
+                                        )
+                                      ],
+                                      borderRadius: BorderRadius.circular(15),
                                     ),
-                                  ),
-                                ),
+                                    child: CachedNetworkImage(
+                                      fit: BoxFit.cover,
+                                      imageUrl:
+                                          widget.comp_list[index].imagePath,
+                                      placeholder: (context, url) => Center(
+                                          child: CircularProgressIndicator(
+                                              color: primary.color)),
+                                    ),
+                                  )
+                                else
+                                  Container(),
                                 Container(
                                   height: 30,
                                   width: 30,
@@ -212,12 +219,13 @@ class _CompaniesListState extends State<CompaniesList>
                                       )
                                     ],
                                     borderRadius: BorderRadius.circular(15),
-                                    image: DecorationImage(
-                                      image: NetworkImage(
-                                        widget.cat_list[index].imagePath,
-                                      ),
-                                      fit: BoxFit.cover,
-                                    ),
+                                  ),
+                                  child: CachedNetworkImage(
+                                    fit: BoxFit.cover,
+                                    imageUrl: widget.cat_list[index].imagePath,
+                                    placeholder: (context, url) => Center(
+                                        child: CircularProgressIndicator(
+                                            color: primary.color)),
                                   ),
                                 ),
                                 Container(

@@ -285,6 +285,70 @@ class _SettingScreenState extends State<SettingScreen> {
                       Row(
                         children: [
                           Icon(
+                            Icons.location_on_outlined,
+                            color: primary.color,
+                          ),
+                          Container(
+                            margin: EdgeInsets.only(left: 15),
+                            child: Text(
+                              'About us',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: primary.color,
+                                fontSize: 17,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      Icon(
+                        Icons.arrow_forward_ios,
+                        size: 18,
+                      )
+                    ],
+                  ),
+                ),
+                Divider(indent: 20, endIndent: 20),
+                Container(
+                  padding: EdgeInsets.symmetric(horizontal: 32, vertical: 13),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Row(
+                        children: [
+                          Icon(
+                            Icons.location_on_outlined,
+                            color: primary.color,
+                          ),
+                          Container(
+                            margin: EdgeInsets.only(left: 15),
+                            child: Text(
+                              'Contact us',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: primary.color,
+                                fontSize: 17,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      Icon(
+                        Icons.arrow_forward_ios,
+                        size: 18,
+                      )
+                    ],
+                  ),
+                ),
+                Divider(indent: 20, endIndent: 20),
+                Container(
+                  padding: EdgeInsets.symmetric(horizontal: 32, vertical: 13),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Row(
+                        children: [
+                          Icon(
                             Icons.help_outline_outlined,
                             color: primary.color,
                           ),
