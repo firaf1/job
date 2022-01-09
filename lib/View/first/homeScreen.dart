@@ -24,20 +24,33 @@ class _HomeScreenState extends State<HomeScreen> {
   bool serverError = false;
   @override
   void initState() {
-    adController.fetchAds().then((value) => setState(() {
-          print(adController.ad.length);
-        }));
+    adController.fetchAds().then(
+      (value) {
+        if (this.mounted) {
+          setState(() {});
+        }
+      },
+    );
     jobContorller.fetchJobsCategory();
-    jobContorller.fetchJobs(category: -1).then((value) => setState(() {
-          print(adController.ad.length);
-        }));
-    jobContorller.companiesFetch().then((value) => setState(() {
+    jobContorller.fetchJobs(category: -1).then((value) {
+      if (this.mounted)
+        setState(
+          () {
+            print(adController.ad.length);
+          },
+        );
+    });
+    jobContorller.companiesFetch().then((value) {
+      if (this.mounted) {
+        setState(() {
           jobContorller.isLoading = false;
-          print('${jobContorller.isServerError} print');
+          
           // jobContorller.jobs_category.addAll(jobContorller.jobs_category);
           // print(jobContorller.jobs_category.length);
-        }));
-    print(adController.ad.length);
+        });
+      }
+    });
+
   }
 
   Future onRefreshWidget() async {

@@ -1,9 +1,12 @@
+import 'dart:convert';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:techino_app/View/Auth/Signup/signup.dart';
 import 'package:techino_app/intro/utilities/styles.dart';
 import 'package:http/http.dart' as http;
+import 'package:techino_app/mainScreen.dart';
 
 class Login extends StatefulWidget {
   Login({Key? key}) : super(key: key);
@@ -14,10 +17,12 @@ class Login extends StatefulWidget {
 
 class _LoginState extends State<Login> with TickerProviderStateMixin {
   GlobalKey<FormState> globalkey = GlobalKey();
+  final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
   late bool rememberMe;
   bool isLoading = false;
   late String password = "";
   late String userName = "";
+  late bool isWrongCredential = false;
   bool isHide = true;
   String passwordErrorMessage = "";
   String emailErrorMessage = "";
@@ -25,19 +30,55 @@ class _LoginState extends State<Login> with TickerProviderStateMixin {
   void initState() {
     setState(() {
       rememberMe = true;
+      SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+        statusBarIconBrightness: Brightness.light,
+        systemNavigationBarColor: Colors.white, // navigation bar color
+        statusBarColor: Colors.white, // status bar color
+      ));
     });
     // TODO: implement initState
     super.initState();
   }
 
+  addToSharedPre(response) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      prefs.setString('token', response['token']);
+      prefs.setString('job', response['job']);
+      prefs.setString('address', response['address']);
+      prefs.setString('phoneNumber', response['phoneNumber']);
+      prefs.setString('email', response['email']);
+      prefs.setString('name', response['name']);
+      prefs.setString('image_path', response['image_path']);
+      prefs.setInt('total_jobs', response['total_jobs']);
+    });
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        margin:
+            EdgeInsets.only(bottom: MediaQuery.of(context).size.height - 150),
+        backgroundColor: Colors.cyan,
+        behavior: SnackBarBehavior.floating,
+        content: Container(
+          height: 30,
+          width: 50,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(Icons.verified_sharp, color: Colors.white, size: 30),
+              Container(width: 20),
+              Text('Successfully Loged in '),
+            ],
+          ),
+        ),
+      ),
+    );
+    Navigator.pushReplacement(
+        context, new MaterialPageRoute(builder: (context) => new MainScreen()));
+    // print(prefs.getString('token'));
+  }
+
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-      statusBarIconBrightness: Brightness.light,
-      systemNavigationBarColor: Colors.white, // navigation bar color
-      statusBarColor: Colors.white, // status bar color
-    ));
-
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
@@ -116,15 +157,25 @@ class _LoginState extends State<Login> with TickerProviderStateMixin {
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Container(
-                            child: Text(
-                              emailErrorMessage,
-                              style: TextStyle(color: Colors.red),
-                            ),
-                          ),
-                          emailErrorMessage.isEmpty
+                          this.isWrongCredential
+                              ? Center(
+                                  child: Container(
+                                    child: Text(
+                                      "The provided credentials is incorrect",
+                                      style: TextStyle(color: Colors.red),
+                                    ),
+                                  ),
+                                )
+                              : Container(
+                                  child: Text(
+                                    emailErrorMessage,
+                                    style: TextStyle(color: Colors.red),
+                                  ),
+                                ),
+                          emailErrorMessage.isEmpty &&
+                                  this.isWrongCredential == false
                               ? Container(
-                                  margin: EdgeInsets.only(bottom: 12, top: 10),
+                                  margin: EdgeInsets.only(top: 10),
                                   decoration: BoxDecoration(
                                     color: Color(0xFFf2f2f2),
                                     borderRadius: BorderRadius.circular(7),
@@ -162,11 +213,13 @@ class _LoginState extends State<Login> with TickerProviderStateMixin {
                                   ),
                                 )
                               : Container(
-                                  margin: EdgeInsets.only(bottom: 12, top: 10),
+                                  margin: EdgeInsets.only(top: 10),
                                   decoration: BoxDecoration(
                                     color: Color(0xFFf2f2f2),
-                                    border:
-                                        Border.all(width: 2, color: Colors.red),
+                                    border: Border.all(
+                                      width: 2,
+                                      color: Colors.red,
+                                    ),
                                     borderRadius: BorderRadius.circular(7),
                                   ),
                                   padding: EdgeInsets.symmetric(
@@ -202,14 +255,15 @@ class _LoginState extends State<Login> with TickerProviderStateMixin {
                                   ),
                                 ),
                           Container(
+                            margin: EdgeInsets.only(bottom: 1),
                             child: Text(
                               passwordErrorMessage,
                               style: TextStyle(color: Colors.red),
                             ),
                           ),
-                          this.passwordErrorMessage.isEmpty
+                          this.passwordErrorMessage.isEmpty &&
+                                  this.isWrongCredential == false
                               ? Container(
-                                
                                   decoration: BoxDecoration(
                                     color: Color(0xFFf2f2f2),
                                     borderRadius: BorderRadius.circular(7),
@@ -217,9 +271,7 @@ class _LoginState extends State<Login> with TickerProviderStateMixin {
                                   padding: EdgeInsets.symmetric(
                                     horizontal: 10,
                                   ),
-                                
                                   child: TextFormField(
-                                  
                                     validator: (value) {
                                       if (value!.isEmpty) {
                                         if (value.isEmpty) {
@@ -350,11 +402,13 @@ class _LoginState extends State<Login> with TickerProviderStateMixin {
                           this.isLoading == false
                               ? InkWell(
                                   onTap: () {
+                                    FocusScope.of(context).unfocus();
                                     globalkey.currentState!.validate();
                                     if (userName.isNotEmpty &&
                                         password.isNotEmpty) {
                                       setState(() {
                                         this.isLoading = true;
+                                        this.isWrongCredential = false;
                                       });
                                       print(this.isLoading);
                                       http.post(Uri.parse("$url/login-request"),
@@ -362,12 +416,76 @@ class _LoginState extends State<Login> with TickerProviderStateMixin {
                                             'email': userName,
                                             'password': password,
                                           }).then((value) {
-                                        print(value.body);
                                         setState(() {
                                           this.isLoading = false;
                                         });
-                                        print(this.isLoading);
+                                        if (value.statusCode == 403) {
+                                          this.userName = "";
+                                          this.password = "";
+                                          if (!this.isWrongCredential) {
+                                            setState(() {
+                                              this.isWrongCredential = true;
+                                            });
+                                          }
+                                          setState(() {
+                                            this.emailErrorMessage = "";
+                                          });
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(
+                                            SnackBar(
+                                              margin:
+                                                  EdgeInsets.only(bottom: 10),
+                                              backgroundColor: Colors.red,
+                                              behavior:
+                                                  SnackBarBehavior.floating,
+                                              content: Container(
+                                                width: 50,
+                                                child: Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.center,
+                                                  children: [
+                                                    Icon(Icons.close,
+                                                        color: Colors.white,
+                                                        size: 30),
+                                                    Text(
+                                                        'The provided credentials is incorrect...'),
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                          );
+                                        } else if (value.statusCode == 200) {
+                                          final respons =
+                                              json.decode(value.body);
+                                          addToSharedPre(respons);
+                                        } else {
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(
+                                            SnackBar(
+                                              margin:
+                                                  EdgeInsets.only(bottom: 10),
+                                              backgroundColor: Colors.red,
+                                              behavior:
+                                                  SnackBarBehavior.floating,
+                                              content: Container(
+                                                width: 50,
+                                                child: Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.center,
+                                                  children: [
+                                                    Icon(Icons.close,
+                                                        color: Colors.white,
+                                                        size: 30),
+                                                    Text('Server Error....'),
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                          );
+                                        }
                                       });
+                                    } else {
+                                      this.isWrongCredential = false;
                                     }
                                   },
                                   child: Container(

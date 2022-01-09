@@ -18,5 +18,5 @@ final kSubtitleStyle = TextStyle(
   fontSize: 18.0,
   height: 1.2,
 );
-final url = "http://job.habeshawimart.com/api";
-// final url = "http://127.0.0.1:8000/api";
+// final url = "http://job.habeshawimart.com/api";
+final url = "http://127.0.0.1:8000/api";

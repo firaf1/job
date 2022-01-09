@@ -127,6 +127,8 @@ class _CompaniesListState extends State<CompaniesList>
                                       placeholder: (context, url) => Center(
                                           child: CircularProgressIndicator(
                                               color: primary.color)),
+                                      errorWidget: (context, url, error) =>
+                                          Icon(Icons.error, color:Colors.red),
                                     ),
                                   )
                                 else
@@ -226,6 +228,8 @@ class _CompaniesListState extends State<CompaniesList>
                                     placeholder: (context, url) => Center(
                                         child: CircularProgressIndicator(
                                             color: primary.color)),
+                                    errorWidget: (context, url, error,) =>
+                                        Icon(Icons.error, color:Colors.red),
                                   ),
                                 ),
                                 Container(

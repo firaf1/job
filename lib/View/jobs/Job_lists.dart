@@ -85,6 +85,8 @@ class _JobsListState extends State<JobsList> {
                                 placeholder: (context, url) => Center(
                                     child: CircularProgressIndicator(
                                         color: primary.color)),
+                                errorWidget: (context, url, error) =>
+                                    Icon(Icons.error, color:Colors.red,),
                               ),
                             ),
                           ),

@@ -1,7 +1,9 @@
 import 'package:bottom_navy_bar/bottom_navy_bar.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:techino_app/Controller/user_controller.dart';
 import 'package:techino_app/View/Auth/Login/login.dart';
 import 'package:techino_app/Controller/Job_controller.dart';
 import 'package:techino_app/Model/Jobs_category.dart';
@@ -15,6 +17,8 @@ import 'package:techino_app/View/setting/setting.dart';
 
 import 'View/first/Top_nav_card.dart';
 
+UserController userController = new UserController();
+
 class MainScreen extends StatefulWidget {
   const MainScreen({Key? key}) : super(key: key);
 
@@ -23,6 +27,19 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
+  bool token = false;
+  @override
+  void initState() {
+    userController.getSharedPrefs().then((value) {
+      setState(() {
+        token = userController.token;
+      });
+    });
+
+    // TODO: implement initState
+    super.initState();
+  }
+
   final List<String> entries = <String>['A', 'B', 'C'];
   final List<int> colorCodes = <int>[0xFFfbefee, 0xFFe5f1f1, 0xFFfff7e5];
   int _currentIndex = 0;
@@ -81,7 +98,6 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
         ],
       ),
       appBar: AppBar(
-        
         brightness: Brightness.light,
         backwardsCompatibility: false,
         systemOverlayStyle: SystemUiOverlayStyle(statusBarColor: primary.color),
@@ -94,22 +110,33 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
               ),
             );
           },
-          child: Container(
-            height: 10,
-            width: 10,
-            decoration: BoxDecoration(
-              border: Border.all(
-                  width: 4, color: Color.fromRGBO(255, 218, 230, 0.55)),
-              color: Colors.red,
-              borderRadius: BorderRadius.circular(30),
-              image: DecorationImage(
-                image: AssetImage(
-                  'assets/images/my.jpg',
+          child: !token
+              ? Icon(
+                  Icons.person_add_alt,
+                  size: 30,
+                  color: Colors.white,
+                )
+              : Container(
+                  height: 10,
+                  width: 10,
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                        width: 4, color: Color.fromRGBO(255, 218, 230, 0.55)),
+                    color: Colors.red,
+                    borderRadius: BorderRadius.circular(30),
+                  ),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(10000.0),
+                    child: CachedNetworkImage(
+                      fit: BoxFit.cover,
+                      imageUrl: userController.imagePath,
+                      placeholder: (context, url) => Center(
+                          child:
+                              CircularProgressIndicator(color: primary.color)),
+                      errorWidget: (context, url, error) => Icon(Icons.error, color:Colors.red),
+                    ),
+                  ),
                 ),
-                fit: BoxFit.cover,
-              ),
-            ),
-          ),
         ),
         title: Text("Logo Here",
             style: TextStyle(

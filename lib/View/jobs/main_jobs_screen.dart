@@ -29,10 +29,12 @@ class _Main_Jobs_ScreenState extends State<Main_Jobs_Screen> {
 
     jobContorller.fetchJobsCategory();
     try {
-      jobContorller.fetchJobs().then((value) => setState(() {
-            jobContorller.isLoading = false;
-            // jobContorller.jobs_category.addAll(jobContorller.jobs_category);
-          }));
+      jobContorller.fetchJobs().then((value) {
+        setState(() {
+          jobContorller.isLoading = false;
+          // jobContorller.jobs_category.addAll(jobContorller.jobs_category);
+        });
+      });
     } catch (e) {
       print('error in main job category fetching');
     }

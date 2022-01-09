@@ -1,8 +1,18 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:techino_app/Controller/ad_controller.dart';
+import 'package:techino_app/Controller/user_controller.dart';
+import 'package:techino_app/View/Profile/profile.dart';
 import 'package:techino_app/intro/utilities/styles.dart';
+import 'package:http/http.dart' as http;
+import 'package:techino_app/mainScreen.dart';
 
 class UpdateProfile extends StatefulWidget {
   var title, update;
+
   UpdateProfile({this.title, this.update});
 
   @override
@@ -10,6 +20,65 @@ class UpdateProfile extends StatefulWidget {
 }
 
 class _UpdateProfileState extends State<UpdateProfile> {
+  bool nameLoading = false;
+  updatePre(key, value) async {
+    if (key == 'name') {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      setState(() {
+        prefs.setString('name', name).then((value) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              margin: EdgeInsets.only(
+                  bottom: MediaQuery.of(context).size.height - 150),
+              backgroundColor: Colors.cyan,
+              behavior: SnackBarBehavior.floating,
+              content: Container(
+                height: 30,
+                width: 50,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(Icons.verified_sharp, color: Colors.white, size: 30),
+                    Container(width: 20),
+                    Text('Successfully Updated!'),
+                  ],
+                ),
+              ),
+            ),
+          );
+          Navigator.pushReplacement(context,
+              new MaterialPageRoute(builder: (context) => new MainScreen()));
+        });
+      });
+    }
+  }
+
+  _setHeaders() => {
+        'Content-type': 'application/json',
+        'Accept': 'application/json',
+        'Authorization': 'Bearer ${userController.accessToken}'
+      };
+
+  UserController userController = new UserController();
+  late String name = "", email = "", phoneNumber = "", address = "", job = "";
+
+  bool isNameLoading = false;
+  @override
+  void initState() {
+    userController.getSharedPrefs().then((value) {
+      setState(() {
+        name = userController.name;
+        email = userController.email;
+        phoneNumber = userController.phoneNumber;
+        address = userController.address;
+        job = userController.job;
+      });
+    });
+
+    // TODO: implement initState
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -90,27 +159,57 @@ class _UpdateProfileState extends State<UpdateProfile> {
                                 Icons.account_circle_sharp,
                                 color: primary.color,
                               ),
-                              hintText: 'Firaol Biru',
+                              hintText: name,
                               border: InputBorder.none,
                             ),
+                            onChanged: (value) {
+                              name = value;
+                            },
                           ),
                         ),
-                        Container(
-                          height: 50,
-                          margin: EdgeInsets.only(top: 15, left: 35, right: 35),
-                          width: MediaQuery.of(context).size.width - 70,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(8),
-                            color: primary.color,
-                          ),
-                          child: Center(
-                              child: Text(
-                            'Change Name',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
+                        InkWell(
+                          onTap: () {
+                           setState(() {
+                              nameLoading = true;
+                           });
+                            var data = {'name': name};
+                            print(userController.accessToken);
+                            http
+                                .post(
+                              Uri.parse('$url/update-name'),
+                              body: jsonEncode(data),
+                              headers: _setHeaders(),
+                            )
+                                .then((value) {
+                              if (value.statusCode == 200) {
+                                updatePre('name', name);
+                              }
+                             setState(() {
+                                nameLoading = false;
+                             });
+                            });
+                          },
+                          child: Container(
+                            height: 50,
+                            margin:
+                                EdgeInsets.only(top: 15, left: 35, right: 35),
+                            width: MediaQuery.of(context).size.width - 70,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(8),
+                              color: primary.color,
                             ),
-                          )),
+                            child: Center(
+                              child: nameLoading
+                                  ? CircularProgressIndicator(color:Colors.white)
+                                  : Text(
+                                      'Change Name',
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                            ),
+                          ),
                         ),
                       ],
                     )

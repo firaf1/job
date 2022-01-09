@@ -1,9 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:techino_app/Controller/user_controller.dart';
 import 'package:techino_app/mainScreen.dart';
 import 'package:techino_app/no_connection.dart';
+import 'package:techino_app/server_error.dart';
 // import 'package:techino_app/first/mainScreen.dart';
 
-void main() async {
+Future<void> main() async {
+  UserController userController = new UserController();
+  userController.getSharedPrefs();
+  WidgetsFlutterBinding.ensureInitialized();
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  String login = prefs.getString("token1").toString();
+  print("login:" + login.toString());
+
 //   to hide only bottom bar:
   // SystemChrome.setEnabledSystemUIOverlays([SystemUiOverlay.top]);
   // to hide only status bar:
@@ -11,10 +21,8 @@ void main() async {
   // to hide both:
 // SystemChrome.setEnabledSystemUIOverlays ([]);
 
- 
-    runApp(MyApp());
- 
-
+  // runApp(MaterialApp(home: login == "" ? NoConnection() : ServerError()));
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {

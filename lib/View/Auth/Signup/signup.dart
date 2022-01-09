@@ -470,7 +470,9 @@ class _SignupState extends State<Signup> {
                             ),
                           ),
                           GestureDetector(
+
                             onTap: () {
+                              FocusScope.of(context).unfocus();
                               globalkey.currentState!.validate();
 
                               if (this.fullName.isNotEmpty &&
@@ -508,13 +510,7 @@ class _SignupState extends State<Signup> {
                                       ScaffoldMessenger.of(context)
                                           .showSnackBar(
                                         SnackBar(
-                                          margin: EdgeInsets.only(
-                                              left: 10,
-                                              right: 10,
-                                              bottom: MediaQuery.of(context)
-                                                      .size
-                                                      .height -
-                                                  150),
+                                          margin: EdgeInsets.only(bottom: 10),
                                           backgroundColor: Colors.red,
                                           behavior: SnackBarBehavior.floating,
                                           content: Container(
@@ -575,13 +571,7 @@ class _SignupState extends State<Signup> {
                                       ScaffoldMessenger.of(context)
                                           .showSnackBar(
                                         SnackBar(
-                                          margin: EdgeInsets.only(
-                                              left: 10,
-                                              right: 10,
-                                              bottom: MediaQuery.of(context)
-                                                      .size
-                                                      .height -
-                                                  150),
+                                           margin: EdgeInsets.only(bottom: 10),
                                           backgroundColor: Color(0xFF000080),
                                           behavior: SnackBarBehavior.floating,
                                           content: Container(

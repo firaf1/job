@@ -1,8 +1,27 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:techino_app/Controller/user_controller.dart';
 import 'package:techino_app/intro/utilities/styles.dart';
 
-class Top_Card extends StatelessWidget {
-  const Top_Card({Key? key}) : super(key: key);
+class Top_Card extends StatefulWidget {
+  @override
+  _Top_CardState createState() => _Top_CardState();
+}
+
+class _Top_CardState extends State<Top_Card> {
+  UserController userController = new UserController();
+  bool token = false;
+  @override
+  void initState() {
+    userController.getSharedPrefs().then((value) {
+      setState(() {
+        token = userController.token;
+      });
+    });
+
+    // TODO: implement initState
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -20,8 +39,8 @@ class Top_Card extends StatelessWidget {
               decoration: BoxDecoration(
                 color: primary.color,
                 borderRadius: BorderRadius.only(
-                  bottomLeft: Radius.circular(30),
-                  bottomRight: Radius.circular(30),
+                  bottomLeft: Radius.circular(20),
+                  bottomRight: Radius.circular(20),
                 ),
               ),
               child: Container(
@@ -29,17 +48,29 @@ class Top_Card extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Container(
-                      child: Text(
-                        "Welcome ...",
-                        style: TextStyle(
-                          color: secondary.color,
-                          // fontFamily: rob,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 25.5,
-                        ),
-                      ),
-                    ),
+                    !token
+                        ? Container(
+                            child: Text(
+                              "Welcome ...",
+                              style: TextStyle(
+                                color: secondary.color,
+                                // fontFamily: rob,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 25.5,
+                              ),
+                            ),
+                          )
+                        : Container(
+                            child: Text(
+                              "🖐 ${userController.name} ",
+                              style: TextStyle(
+                                color: secondary.color,
+                                // fontFamily: rob,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 25.5,
+                              ),
+                            ),
+                          ),
                     Container(
                       margin: EdgeInsets.only(top: 10),
                       child: Text(
