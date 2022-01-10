@@ -1,12 +1,17 @@
 import 'dart:convert';
 
+ 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:techino_app/Controller/Job_controller.dart';
+import 'package:techino_app/Controller/user_controller.dart';
+import 'package:techino_app/Model/Jobs_category.dart';
 
 import 'package:techino_app/View/Auth/Login/login.dart';
 import 'package:techino_app/Model/user.dart';
 import 'package:http/http.dart' as http;
+import 'package:techino_app/View/first/jobCategory.dart';
 import 'package:techino_app/intro/utilities/styles.dart';
 
 class Signup extends StatefulWidget {
@@ -17,6 +22,19 @@ class Signup extends StatefulWidget {
 }
 
 class _SignupState extends State<Signup> {
+  JobContorller jobContorller = new JobContorller();
+  List<JobsCategory> jobsCategory = [];
+  @override
+  void initState() {
+    jobContorller.fetchJobsCategory().then((value) {
+      if (this.mounted) {
+        setState(() {
+          jobsCategory = jobContorller.jobs_category;
+        });
+      }
+    });
+  }
+
   GlobalKey<FormState> globalkey = GlobalKey();
   bool rememberMe = false;
   bool isShow = true;
@@ -31,12 +49,7 @@ class _SignupState extends State<Signup> {
 
   late String message;
   bool isShow2 = true;
-  List<String> jobs = [
-    'Accounting',
-    'Software',
-    'Doctor',
-    'Something else'
-  ]; // Option 2
+  List<JobCategory> jobs = [];
   late String _dropDownValue = "Select Your Job Category";
   late String fullName = "",
       email = "",
@@ -133,6 +146,7 @@ class _SignupState extends State<Signup> {
                             padding: EdgeInsets.symmetric(horizontal: 10),
                             child: TextFormField(
                               onChanged: (value) {
+                                print(jobContorller.jobs_category.length);
                                 this.fullName = value;
                               },
                               validator: (value) {
@@ -237,12 +251,16 @@ class _SignupState extends State<Signup> {
                               ),
                             ),
                           ),
-                          Container(
-                            child: Text(
-                              emailMessage,
-                              style: TextStyle(color: Colors.red),
-                            ),
-                          ),
+                          if (emailMessage != "")
+                            Container(
+                              child: Text(
+                                emailMessage,
+                                style: TextStyle(color: Colors.red),
+                              ),
+                            )
+                          else
+                            SizedBox(height: 7),
+                        
                           Container(
                             padding: EdgeInsets.symmetric(horizontal: 20),
                             margin: EdgeInsets.only(bottom: 3, top: 3),
@@ -253,6 +271,7 @@ class _SignupState extends State<Signup> {
                             child: DropdownButtonFormField(
                               decoration: InputDecoration(
                                   enabledBorder: InputBorder.none),
+
                               // ignore: unnecessary_null_comparison
                               hint: _dropDownValue == null
                                   ? Text('Dropdown')
@@ -263,11 +282,11 @@ class _SignupState extends State<Signup> {
                               isExpanded: true,
                               iconSize: 30.0,
                               style: TextStyle(color: primary.color),
-                              items: jobs.map(
+                              items: jobsCategory.map(
                                 (val) {
                                   return DropdownMenuItem<String>(
-                                    value: val,
-                                    child: Text(val),
+                                    value: val.id.toString(),
+                                    child: Text(val.name),
                                   );
                                 },
                               ).toList(),
@@ -470,7 +489,6 @@ class _SignupState extends State<Signup> {
                             ),
                           ),
                           GestureDetector(
-
                             onTap: () {
                               FocusScope.of(context).unfocus();
                               globalkey.currentState!.validate();
@@ -571,7 +589,7 @@ class _SignupState extends State<Signup> {
                                       ScaffoldMessenger.of(context)
                                           .showSnackBar(
                                         SnackBar(
-                                           margin: EdgeInsets.only(bottom: 10),
+                                          margin: EdgeInsets.only(bottom: 10),
                                           backgroundColor: Color(0xFF000080),
                                           behavior: SnackBarBehavior.floating,
                                           content: Container(

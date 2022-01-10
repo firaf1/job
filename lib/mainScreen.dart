@@ -121,8 +121,8 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
                   width: 10,
                   decoration: BoxDecoration(
                     border: Border.all(
-                        width: 4, color: Color.fromRGBO(255, 218, 230, 0.55)),
-                    color: Colors.red,
+                        width: 5, color: Color.fromRGBO(005, 108, 200, 0.3)),
+                    color: Colors.white,
                     borderRadius: BorderRadius.circular(30),
                   ),
                   child: ClipRRect(
@@ -133,7 +133,8 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
                       placeholder: (context, url) => Center(
                           child:
                               CircularProgressIndicator(color: primary.color)),
-                      errorWidget: (context, url, error) => Icon(Icons.error, color:Colors.red),
+                      errorWidget: (context, url, error) =>
+                          Icon(Icons.error, color: Colors.red),
                     ),
                   ),
                 ),

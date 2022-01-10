@@ -1,7 +1,10 @@
+import 'dart:html';
+
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:techino_app/View/Profile/update_profile.dart';
 import 'package:techino_app/intro/utilities/styles.dart';
-
+ 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({Key? key}) : super(key: key);
 
@@ -10,6 +13,7 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
+ final ImagePicker _picker = ImagePicker();
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -234,15 +238,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ),
             ),
             GestureDetector(
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (BuildContext conte) => UpdateProfile(
-                        title: 'Change Profile Picture',
-                        update: 'profilePicture'),
-                  ),
-                );
+              
+              onTap: () async {
+               final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
               },
               child: Container(
                 padding: EdgeInsets.symmetric(horizontal: 20),
