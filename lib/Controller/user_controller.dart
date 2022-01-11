@@ -22,9 +22,10 @@ class UserController {
       accessToken = prefs.getString("token").toString();
       address = prefs.getString("address").toString();
       phoneNumber = prefs.getString("phoneNumber").toString();
-      email = prefs.getString("name").toString();
+      email = prefs.getString("email").toString();
       imagePath = prefs.getString("image_path").toString();
       totalJobs = prefs.getInt("total_jobs")!.toInt();
+      print(accessToken);
     }
   }
 

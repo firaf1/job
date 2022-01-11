@@ -19,7 +19,21 @@ class UpdateProfile extends StatefulWidget {
   _UpdateProfileState createState() => _UpdateProfileState();
 }
 
+String phoneNumberMessage = "";
+String phoneNumber = "";
+String phoneNumber1 = "";
+bool phoneLoading = false;
+String password = "", oldPassword = "", confirmPassword = "";
+String passwordMessage = "",
+    oldPasswordMessage = "",
+    confirmPasswordMessage = "";
+bool isShow2 = true;
+bool isShow = true;
+bool isShow3 = true;
+bool passwordLoading = false;
+
 class _UpdateProfileState extends State<UpdateProfile> {
+  GlobalKey<FormState> globalkey = GlobalKey();
   bool nameLoading = false;
   updatePre(key, value) async {
     if (key == 'name') {
@@ -29,7 +43,7 @@ class _UpdateProfileState extends State<UpdateProfile> {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               margin: EdgeInsets.only(
-                  bottom: MediaQuery.of(context).size.height - 150),
+                  bottom: MediaQuery.of(context).size.height - 140),
               backgroundColor: Colors.cyan,
               behavior: SnackBarBehavior.floating,
               content: Container(
@@ -79,6 +93,43 @@ class _UpdateProfileState extends State<UpdateProfile> {
     super.initState();
   }
 
+  updatePre11(email1) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      userController.phoneNumber = email1;
+      prefs.setString('phoneNumber', email1).then((value) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            margin: EdgeInsets.only(
+                bottom: MediaQuery.of(context).size.height - 140),
+            backgroundColor: Colors.cyan,
+            behavior: SnackBarBehavior.floating,
+            content: Container(
+              height: 30,
+              width: 50,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(Icons.verified_sharp, color: Colors.white, size: 30),
+                  Container(width: 20),
+                  Text('Successfully Updated!'),
+                ],
+              ),
+            ),
+          ),
+        );
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (BuildContext cotext) => MainScreen(
+              index: 2,
+            ),
+          ),
+        );
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -126,7 +177,7 @@ class _UpdateProfileState extends State<UpdateProfile> {
             ),
             Container(
               margin: EdgeInsets.only(top: 45, left: 35, right: 35),
-              height: 250,
+              padding: EdgeInsets.all(10),
               width: MediaQuery.of(context).size.width - 70,
               decoration: BoxDecoration(
                 color: Colors.white,
@@ -169,9 +220,9 @@ class _UpdateProfileState extends State<UpdateProfile> {
                         ),
                         InkWell(
                           onTap: () {
-                           setState(() {
+                            setState(() {
                               nameLoading = true;
-                           });
+                            });
                             var data = {'name': name};
                             print(userController.accessToken);
                             http
@@ -184,9 +235,9 @@ class _UpdateProfileState extends State<UpdateProfile> {
                               if (value.statusCode == 200) {
                                 updatePre('name', name);
                               }
-                             setState(() {
+                              setState(() {
                                 nameLoading = false;
-                             });
+                              });
                             });
                           },
                           child: Container(
@@ -200,7 +251,8 @@ class _UpdateProfileState extends State<UpdateProfile> {
                             ),
                             child: Center(
                               child: nameLoading
-                                  ? CircularProgressIndicator(color:Colors.white)
+                                  ? CircularProgressIndicator(
+                                      color: Colors.white)
                                   : Text(
                                       'Change Name',
                                       style: TextStyle(
@@ -213,97 +265,589 @@ class _UpdateProfileState extends State<UpdateProfile> {
                         ),
                       ],
                     )
-                  : widget.update == 'email'
+                  : widget.update == 'phoneNumber'
                       ? Column(
                           children: [
                             Container(
-                              margin: EdgeInsets.symmetric(
-                                  vertical: 20, horizontal: 15),
-                              decoration: BoxDecoration(
-                                color: Color(0xFFf2f2f2),
-                                borderRadius: BorderRadius.circular(7),
-                              ),
-                              padding: EdgeInsets.symmetric(
-                                horizontal: 10,
-                              ),
-                              child: TextFormField(
-                                decoration: InputDecoration(
-                                  focusColor: primary.color,
-                                  prefixIcon: Icon(
-                                    Icons.mail,
-                                    color: primary.color,
-                                  ),
-                                  hintText: 'feraolbiru@gmail.com',
-                                  border: InputBorder.none,
-                                ),
-                              ),
+                              child: Text(phoneNumberMessage,
+                                  style: TextStyle(color: Colors.red)),
                             ),
-                            Container(
-                              height: 50,
-                              margin:
-                                  EdgeInsets.only(top: 15, left: 35, right: 35),
-                              width: MediaQuery.of(context).size.width - 70,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(8),
-                                color: primary.color,
-                              ),
-                              child: Center(
-                                  child: Text(
-                                'Change Email',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
+                            phoneNumberMessage != ""
+                                ? Container(
+                                    margin: EdgeInsets.symmetric(
+                                        vertical: 20, horizontal: 15),
+                                    decoration: BoxDecoration(
+                                      border: Border.all(
+                                          width: 3, color: Colors.red),
+                                      color: Color(0xFFf2f2f2),
+                                      borderRadius: BorderRadius.circular(7),
+                                    ),
+                                    padding: EdgeInsets.symmetric(
+                                      horizontal: 10,
+                                    ),
+                                    child: TextFormField(
+                                      onChanged: (value) {
+                                        phoneNumber1 = value;
+                                      },
+                                      decoration: InputDecoration(
+                                        focusColor: primary.color,
+                                        prefixIcon: Icon(
+                                          Icons.call,
+                                          color: Colors.red,
+                                        ),
+                                        hintText: userController.phoneNumber,
+                                        border: InputBorder.none,
+                                      ),
+                                    ),
+                                  )
+                                : Container(
+                                    margin: EdgeInsets.symmetric(
+                                        vertical: 20, horizontal: 15),
+                                    decoration: BoxDecoration(
+                                      color: Color(0xFFf2f2f2),
+                                      borderRadius: BorderRadius.circular(7),
+                                    ),
+                                    padding: EdgeInsets.symmetric(
+                                      horizontal: 10,
+                                    ),
+                                    child: TextFormField(
+                                      onChanged: (value) {
+                                        phoneNumber1 = value;
+                                      },
+                                      decoration: InputDecoration(
+                                        focusColor: primary.color,
+                                        prefixIcon: Icon(
+                                          Icons.call,
+                                          color: primary.color,
+                                        ),
+                                        hintText: userController.phoneNumber,
+                                        border: InputBorder.none,
+                                      ),
+                                    ),
+                                  ),
+                            GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  phoneLoading = true;
+                                });
+                                var data = {
+                                  'phone_number': phoneNumber1,
+                                };
+
+                                http
+                                    .post(
+                                  Uri.parse('$url/update-phone'),
+                                  body: jsonEncode(data),
+                                  headers: _setHeaders(),
+                                )
+                                    .then((value) {
+                                  setState(() {
+                                    phoneNumberMessage = "";
+                                  });
+                                  if (value.statusCode != 200) {
+                                    final response = json.decode(value.body);
+
+                                    Map<String, dynamic> error_list = response;
+
+                                    error_list.keys.forEach((element) {
+                                      print(element);
+                                      if (element == 'phone_number') {
+                                        phoneNumberMessage =
+                                            response['phone_number'][0];
+                                      }
+                                    });
+                                    setState(() {
+                                      phoneLoading = false;
+                                    });
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                        margin: EdgeInsets.only(bottom: 10),
+                                        backgroundColor: Colors.red,
+                                        behavior: SnackBarBehavior.floating,
+                                        content: Container(
+                                          width: 50,
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              Icon(Icons.close,
+                                                  color: Colors.white,
+                                                  size: 30),
+                                              Text('Something is went wrong'),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    );
+                                  } else if (value.statusCode == 200) {
+                                    setState(() {
+                                      phoneLoading = false;
+                                    });
+                                    updatePre11(phoneNumber1);
+                                  }
+                                });
+                              },
+                              child: Container(
+                                height: 50,
+                                margin: EdgeInsets.only(
+                                    top: 15, left: 35, right: 35),
+                                width: MediaQuery.of(context).size.width - 70,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(8),
+                                  color: primary.color,
                                 ),
-                              )),
+                                child: Center(
+                                    child: phoneLoading
+                                        ? CircularProgressIndicator(
+                                            color: Colors.white)
+                                        : Text(
+                                            'Change Phone',
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          )),
+                              ),
                             ),
                           ],
                         )
-                      : widget.update == 'phoneNumber'
+                      : widget.update == "password"
                           ? Column(
                               children: [
-                                Container(
-                                  margin: EdgeInsets.symmetric(
-                                      vertical: 20, horizontal: 15),
-                                  decoration: BoxDecoration(
-                                    color: Color(0xFFf2f2f2),
-                                    borderRadius: BorderRadius.circular(7),
-                                  ),
-                                  padding: EdgeInsets.symmetric(
-                                    horizontal: 10,
-                                  ),
-                                  child: TextFormField(
-                                    decoration: InputDecoration(
-                                      focusColor: primary.color,
-                                      prefixIcon: Icon(
-                                        Icons.call,
-                                        color: primary.color,
+                                oldPasswordMessage != ""
+                                    ? Container(
+                                        child: Text(
+                                          oldPasswordMessage,
+                                          style: TextStyle(color: Colors.red),
+                                        ),
+                                      )
+                                    : Container(),
+                                oldPasswordMessage != ""
+                                    ? Container(
+                                        margin: EdgeInsets.only(
+                                            bottom: 12, top: 10),
+                                        decoration: BoxDecoration(
+                                          border: Border.all(
+                                              width: 3, color: Colors.red),
+                                          color: Color(0xFFf2f2f2),
+                                          borderRadius:
+                                              BorderRadius.circular(7),
+                                        ),
+                                        padding: EdgeInsets.symmetric(
+                                          horizontal: 10,
+                                        ),
+                                        child: TextFormField(
+                                          onChanged: (value) {
+                                            oldPassword = value;
+                                          },
+                                          obscureText: isShow,
+                                          decoration: InputDecoration(
+                                            prefixIcon: Icon(
+                                              Icons.lock_outline_rounded,
+                                              color: primary.color,
+                                            ),
+                                            suffixIcon: GestureDetector(
+                                              onTap: () {
+                                                setState(() {
+                                                  isShow = !isShow;
+                                                });
+                                              },
+                                              child: Icon(
+                                                isShow == true
+                                                    ? Icons.remove_red_eye_sharp
+                                                    : Icons.visibility_off,
+                                                color: primary.color,
+                                              ),
+                                            ),
+                                            hintText: 'Old Password',
+                                            border: InputBorder.none,
+                                          ),
+                                        ),
+                                      )
+                                    : Container(
+                                        margin: EdgeInsets.only(
+                                            bottom: 12, top: 10),
+                                        decoration: BoxDecoration(
+                                          color: Color(0xFFf2f2f2),
+                                          borderRadius:
+                                              BorderRadius.circular(7),
+                                        ),
+                                        padding: EdgeInsets.symmetric(
+                                          horizontal: 10,
+                                        ),
+                                        child: TextFormField(
+                                          onChanged: (value) {
+                                            oldPassword = value;
+                                          },
+                                          obscureText: isShow,
+                                          decoration: InputDecoration(
+                                            prefixIcon: Icon(
+                                              Icons.lock_outline_rounded,
+                                              color: primary.color,
+                                            ),
+                                            suffixIcon: GestureDetector(
+                                              onTap: () {
+                                                setState(() {
+                                                  isShow = !isShow;
+                                                });
+                                              },
+                                              child: Icon(
+                                                isShow == true
+                                                    ? Icons.remove_red_eye_sharp
+                                                    : Icons.visibility_off,
+                                                color: primary.color,
+                                              ),
+                                            ),
+                                            hintText: 'Old Password',
+                                            border: InputBorder.none,
+                                          ),
+                                        ),
                                       ),
-                                      hintText: '+251936258910',
-                                      border: InputBorder.none,
+                                passwordMessage != ""
+                                    ? Container(
+                                        child: Text(
+                                          passwordMessage,
+                                          style: TextStyle(color: Colors.red),
+                                        ),
+                                      )
+                                    : Container(),
+                                passwordMessage != ""
+                                    ? Container(
+                                        margin: EdgeInsets.only(
+                                            bottom: 12, top: 10),
+                                        decoration: BoxDecoration(
+                                          border: Border.all(
+                                              width: 3, color: Colors.red),
+                                          color: Color(0xFFf2f2f2),
+                                          borderRadius:
+                                              BorderRadius.circular(7),
+                                        ),
+                                        padding: EdgeInsets.symmetric(
+                                          horizontal: 10,
+                                        ),
+                                        child: TextFormField(
+                                          onChanged: (value) {
+                                            password = value;
+                                          },
+                                          obscureText: isShow3,
+                                          decoration: InputDecoration(
+                                            prefixIcon: Icon(
+                                              Icons.lock_outline_rounded,
+                                              color: primary.color,
+                                            ),
+                                            suffixIcon: GestureDetector(
+                                              onTap: () {
+                                                setState(() {
+                                                  isShow3 = !isShow3;
+                                                });
+                                              },
+                                              child: Icon(
+                                                isShow == true
+                                                    ? Icons.remove_red_eye_sharp
+                                                    : Icons.visibility_off,
+                                                color: primary.color,
+                                              ),
+                                            ),
+                                            hintText: 'New Password',
+                                            border: InputBorder.none,
+                                          ),
+                                        ),
+                                      )
+                                    : Container(
+                                        margin: EdgeInsets.only(
+                                            bottom: 12, top: 10),
+                                        decoration: BoxDecoration(
+                                          color: Color(0xFFf2f2f2),
+                                          borderRadius:
+                                              BorderRadius.circular(7),
+                                        ),
+                                        padding: EdgeInsets.symmetric(
+                                          horizontal: 10,
+                                        ),
+                                        child: TextFormField(
+                                          onChanged: (value) {
+                                            password = value;
+                                          },
+                                          obscureText: isShow3,
+                                          decoration: InputDecoration(
+                                            prefixIcon: Icon(
+                                              Icons.lock_outline_rounded,
+                                              color: primary.color,
+                                            ),
+                                            suffixIcon: GestureDetector(
+                                              onTap: () {
+                                                setState(() {
+                                                  isShow3 = !isShow3;
+                                                });
+                                              },
+                                              child: Icon(
+                                                isShow3 == true
+                                                    ? Icons.remove_red_eye_sharp
+                                                    : Icons.visibility_off,
+                                                color: primary.color,
+                                              ),
+                                            ),
+                                            hintText: 'New Password',
+                                            border: InputBorder.none,
+                                          ),
+                                        ),
+                                      ),
+                                confirmPasswordMessage != ""
+                                    ? Container(
+                                        child: Text(
+                                          confirmPasswordMessage,
+                                          style: TextStyle(color: Colors.red),
+                                        ),
+                                      )
+                                    : Container(),
+                                confirmPasswordMessage != ""
+                                    ? Container(
+                                        margin:
+                                            EdgeInsets.only(bottom: 9, top: 10),
+                                        decoration: BoxDecoration(
+                                          border: Border.all(
+                                              width: 3, color: Colors.red),
+                                          color: Color(0xFFf2f2f2),
+                                          borderRadius:
+                                              BorderRadius.circular(7),
+                                        ),
+                                        padding: EdgeInsets.symmetric(
+                                          horizontal: 10,
+                                        ),
+                                        child: TextFormField(
+                                          onChanged: (value) {
+                                            confirmPassword = value;
+                                          },
+                                          obscureText: isShow2,
+                                          decoration: InputDecoration(
+                                            prefixIcon: Icon(
+                                              Icons.lock_outline_rounded,
+                                              color: primary.color,
+                                            ),
+                                            suffixIcon: GestureDetector(
+                                              onTap: () {
+                                                setState(() {
+                                                  isShow2 = !isShow2;
+                                                });
+                                              },
+                                              child: Icon(
+                                                isShow2 == true
+                                                    ? Icons.visibility
+                                                    : Icons
+                                                        .visibility_off_rounded,
+                                                color: primary.color,
+                                              ),
+                                            ),
+                                            hintText: 'Confirm  Password',
+                                            border: InputBorder.none,
+                                          ),
+                                        ),
+                                      )
+                                    : Container(
+                                        margin:
+                                            EdgeInsets.only(bottom: 9, top: 10),
+                                        decoration: BoxDecoration(
+                                          color: Color(0xFFf2f2f2),
+                                          borderRadius:
+                                              BorderRadius.circular(7),
+                                        ),
+                                        padding: EdgeInsets.symmetric(
+                                          horizontal: 10,
+                                        ),
+                                        child: TextFormField(
+                                          onChanged: (value) {
+                                            confirmPassword = value;
+                                          },
+                                          obscureText: isShow2,
+                                          decoration: InputDecoration(
+                                            prefixIcon: Icon(
+                                              Icons.lock_outline_rounded,
+                                              color: primary.color,
+                                            ),
+                                            suffixIcon: GestureDetector(
+                                              onTap: () {
+                                                setState(() {
+                                                  passwordMessage = "";
+                                                  oldPasswordMessage = "";
+                                                  confirmPasswordMessage = "";
+                                                  isShow2 = !isShow2;
+                                                });
+                                              },
+                                              child: Icon(
+                                                isShow2 == true
+                                                    ? Icons.visibility
+                                                    : Icons
+                                                        .visibility_off_rounded,
+                                                color: primary.color,
+                                              ),
+                                            ),
+                                            hintText: 'Confirm  Password',
+                                            border: InputBorder.none,
+                                          ),
+                                        ),
+                                      ),
+                                GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      passwordLoading = true;
+                                    });
+                                    var data = {
+                                      'old_password': oldPassword,
+                                      'password': password,
+                                      'password_confirmation': confirmPassword,
+                                    };
+
+                                    http
+                                        .post(
+                                      Uri.parse('$url/update-password'),
+                                      body: jsonEncode(data),
+                                      headers: _setHeaders(),
+                                    )
+                                        .then((value) {
+                                      if (value.statusCode == 200) {
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(
+                                          SnackBar(
+                                            margin: EdgeInsets.only(
+                                                bottom: MediaQuery.of(context)
+                                                        .size
+                                                        .height -
+                                                    140),
+                                            backgroundColor: Colors.cyan,
+                                            behavior: SnackBarBehavior.floating,
+                                            content: Container(
+                                              height: 30,
+                                              width: 50,
+                                              child: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                children: [
+                                                  Icon(Icons.verified_sharp,
+                                                      color: Colors.white,
+                                                      size: 30),
+                                                  Container(width: 20),
+                                                  Text('Successfully Updated!'),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                        );
+                                        Navigator.pop(context);
+                                      } else if (value.statusCode == 422) {
+                                        final response =
+                                            json.decode(value.body);
+
+                                        Map<String, dynamic> error_list =
+                                            response;
+                                        error_list.keys.forEach((element) {
+                                          if (element == 'password') {
+                                            passwordMessage =
+                                                response['password'][0];
+                                          }
+                                          if (element == 'old_password') {
+                                            oldPasswordMessage =
+                                                response['old_password'][0];
+                                          }
+                                          if (element ==
+                                              'password_confirmation') {
+                                            confirmPasswordMessage = response[
+                                                'password_confirmation'][0];
+                                          }
+                                        });
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(
+                                          SnackBar(
+                                            margin: EdgeInsets.only(
+                                                bottom: MediaQuery.of(context)
+                                                        .size
+                                                        .height -
+                                                    140),
+                                            backgroundColor: Colors.red,
+                                            behavior: SnackBarBehavior.floating,
+                                            content: Container(
+                                              height: 30,
+                                              width: 50,
+                                              child: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                children: [
+                                                  Icon(Icons.close,
+                                                      color: Colors.white,
+                                                      size: 30),
+                                                  Container(width: 20),
+                                                  Text(
+                                                      'Oops Something is went wrong...'),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                        );
+                                      } else if (value.statusCode == 401) {
+                                        oldPasswordMessage =
+                                            "incorrect password";
+
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(
+                                          SnackBar(
+                                            margin: EdgeInsets.only(
+                                                bottom: MediaQuery.of(context)
+                                                        .size
+                                                        .height -
+                                                    110),
+                                            backgroundColor: Colors.red,
+                                            behavior: SnackBarBehavior.floating,
+                                            content: Container(
+                                              height: 30,
+                                              width: 50,
+                                              child: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                children: [
+                                                  Icon(Icons.close,
+                                                      color: Colors.white,
+                                                      size: 30),
+                                                  Container(width: 20),
+                                                  Text(
+                                                      'Oops Something is went wrong...'),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                        );
+                                      }
+                                      setState(() {
+                                        passwordLoading = false;
+                                      });
+                                    });
+                                  },
+                                  child: Container(
+                                    height: 50,
+                                    margin: EdgeInsets.only(
+                                        top: 15, left: 35, right: 35),
+                                    width:
+                                        MediaQuery.of(context).size.width - 70,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(8),
+                                      color: primary.color,
+                                    ),
+                                    child: Center(
+                                      child: passwordLoading == false
+                                          ? Text(
+                                              'Change Password',
+                                              style: TextStyle(
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            )
+                                          : CircularProgressIndicator(
+                                              color: Colors.white,
+                                            ),
                                     ),
                                   ),
-                                ),
-                                Container(
-                                  height: 50,
-                                  margin: EdgeInsets.only(
-                                      top: 15, left: 35, right: 35),
-                                  width: MediaQuery.of(context).size.width - 70,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(8),
-                                    color: primary.color,
-                                  ),
-                                  child: Center(
-                                      child: Text(
-                                    'Change Phone',
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  )),
                                 ),
                               ],
                             )
-                          : Text('hello'),
+                          : Text('other'),
             )
           ],
         ),

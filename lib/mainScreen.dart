@@ -2,25 +2,19 @@ import 'package:bottom_navy_bar/bottom_navy_bar.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:techino_app/Controller/user_controller.dart';
 import 'package:techino_app/View/Auth/Login/login.dart';
-import 'package:techino_app/Controller/Job_controller.dart';
-import 'package:techino_app/Model/Jobs_category.dart';
 import 'package:techino_app/View/Profile/profile.dart';
-
 import 'package:techino_app/View/first/homeScreen.dart';
-
 import 'package:techino_app/intro/utilities/styles.dart';
 import 'package:techino_app/View/jobs/main_jobs_screen.dart';
 import 'package:techino_app/View/setting/setting.dart';
 
-import 'View/first/Top_nav_card.dart';
-
 UserController userController = new UserController();
 
 class MainScreen extends StatefulWidget {
-  const MainScreen({Key? key}) : super(key: key);
+  int index;
+  MainScreen({this.index = 0});
 
   @override
   _MainScreenState createState() => _MainScreenState();
@@ -28,11 +22,13 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
   bool token = false;
+  int _currentIndex = 0;
   @override
   void initState() {
     userController.getSharedPrefs().then((value) {
       setState(() {
         token = userController.token;
+        _currentIndex = widget.index;
       });
     });
 
@@ -42,7 +38,6 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
 
   final List<String> entries = <String>['A', 'B', 'C'];
   final List<int> colorCodes = <int>[0xFFfbefee, 0xFFe5f1f1, 0xFFfff7e5];
-  int _currentIndex = 0;
 
   int _counter = 0;
   var pages = [

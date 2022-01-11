@@ -3,7 +3,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:techino_app/Controller/user_controller.dart';
 import 'package:techino_app/mainScreen.dart';
 import 'package:techino_app/no_connection.dart';
-import 'package:techino_app/server_error.dart';
+ 
 // import 'package:techino_app/first/mainScreen.dart';
 
 Future<void> main() async {

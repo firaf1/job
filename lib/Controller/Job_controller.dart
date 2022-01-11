@@ -122,12 +122,12 @@ class JobContorller {
       // print(request);
       if (request.statusCode == 200) {
         var response = json.decode(request.body);
-        List<Companies> companies_temp = [];
+        List<Companies> companiesTemp = [];
         for (var food1 in response) {
-          companies_temp.add(Companies.fromJson(food1));
+          companiesTemp.add(Companies.fromJson(food1));
         }
 
-        companies_list.addAll(companies_temp);
+        companies_list.addAll(companiesTemp);
       } else {
         this.isServerError = true;
         print('if company not status code 200 ');

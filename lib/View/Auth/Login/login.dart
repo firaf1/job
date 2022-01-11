@@ -55,7 +55,7 @@ class _LoginState extends State<Login> with TickerProviderStateMixin {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         margin:
-            EdgeInsets.only(bottom: MediaQuery.of(context).size.height - 150),
+            EdgeInsets.only(bottom: MediaQuery.of(context).size.height - 140),
         backgroundColor: Colors.cyan,
         behavior: SnackBarBehavior.floating,
         content: Container(
