@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "505648242881",
+    "project_id": "pushnotification-dadb6",
+    "storage_bucket": "pushnotification-dadb6.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:505648242881:android:c6081fdb83f29fe0adf440",
+        "android_client_info": {
+          "package_name": "com.example.techino_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "505648242881-gvq76m35oh5ei142a37auqtbe9vghtv5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyARcCkZ6CkcoJ2GZSd1EHX-GMYWjxWCuSs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "505648242881-gvq76m35oh5ei142a37auqtbe9vghtv5.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

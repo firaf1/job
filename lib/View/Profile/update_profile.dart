@@ -220,25 +220,63 @@ class _UpdateProfileState extends State<UpdateProfile> {
                         ),
                         InkWell(
                           onTap: () {
-                            setState(() {
-                              nameLoading = true;
-                            });
-                            var data = {'name': name};
-                            print(userController.accessToken);
-                            http
-                                .post(
-                              Uri.parse('$url/update-name'),
-                              body: jsonEncode(data),
-                              headers: _setHeaders(),
-                            )
-                                .then((value) {
-                              if (value.statusCode == 200) {
-                                updatePre('name', name);
-                              }
+                            try {
+                              setState(() {
+                                nameLoading = true;
+                              });
+                              var data = {'name': name};
+                              print(userController.accessToken);
+                              http
+                                  .post(
+                                Uri.parse('$url/update-name'),
+                                body: jsonEncode(data),
+                                headers: _setHeaders(),
+                              )
+                                  .then((value) {
+                                if (value.statusCode == 200) {
+                                  updatePre('name', name);
+                                }
+                                setState(() {
+                                  nameLoading = false;
+                                });
+                              });
+                            } catch (e) {
                               setState(() {
                                 nameLoading = false;
                               });
-                            });
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  margin: EdgeInsets.only(
+                                      bottom:
+                                          MediaQuery.of(context).size.height -
+                                              140),
+                                  backgroundColor: Colors.red,
+                                  behavior: SnackBarBehavior.floating,
+                                  content: Container(
+                                    height: 30,
+                                    width: 50,
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Icon(Icons.verified_sharp,
+                                            color: Colors.white, size: 30),
+                                        Container(width: 20),
+                                        Text('Something went wrong!'),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              );
+                              Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (BuildContext cotext) => MainScreen(
+                                    index: 2,
+                                  ),
+                                ),
+                              );
+                            }
                           },
                           child: Container(
                             height: 50,
@@ -327,65 +365,92 @@ class _UpdateProfileState extends State<UpdateProfile> {
                                   ),
                             GestureDetector(
                               onTap: () {
-                                setState(() {
-                                  phoneLoading = true;
-                                });
-                                var data = {
-                                  'phone_number': phoneNumber1,
-                                };
-
-                                http
-                                    .post(
-                                  Uri.parse('$url/update-phone'),
-                                  body: jsonEncode(data),
-                                  headers: _setHeaders(),
-                                )
-                                    .then((value) {
+                                try {
                                   setState(() {
-                                    phoneNumberMessage = "";
+                                    phoneLoading = true;
                                   });
-                                  if (value.statusCode != 200) {
-                                    final response = json.decode(value.body);
+                                  var data = {
+                                    'phone_number': phoneNumber1,
+                                  };
 
-                                    Map<String, dynamic> error_list = response;
-
-                                    error_list.keys.forEach((element) {
-                                      print(element);
-                                      if (element == 'phone_number') {
-                                        phoneNumberMessage =
-                                            response['phone_number'][0];
-                                      }
-                                    });
+                                  http
+                                      .post(
+                                    Uri.parse('$url/update-phone'),
+                                    body: jsonEncode(data),
+                                    headers: _setHeaders(),
+                                  )
+                                      .then((value) {
                                     setState(() {
-                                      phoneLoading = false;
+                                      phoneNumberMessage = "";
                                     });
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(
-                                        margin: EdgeInsets.only(bottom: 10),
-                                        backgroundColor: Colors.red,
-                                        behavior: SnackBarBehavior.floating,
-                                        content: Container(
-                                          width: 50,
-                                          child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            children: [
-                                              Icon(Icons.close,
-                                                  color: Colors.white,
-                                                  size: 30),
-                                              Text('Something is went wrong'),
-                                            ],
+                                    if (value.statusCode != 200) {
+                                      final response = json.decode(value.body);
+
+                                      Map<String, dynamic> error_list =
+                                          response;
+
+                                      error_list.keys.forEach((element) {
+                                        print(element);
+                                        if (element == 'phone_number') {
+                                          phoneNumberMessage =
+                                              response['phone_number'][0];
+                                        }
+                                      });
+                                      setState(() {
+                                        phoneLoading = false;
+                                      });
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(
+                                        SnackBar(
+                                          margin: EdgeInsets.only(bottom: 10),
+                                          backgroundColor: Colors.red,
+                                          behavior: SnackBarBehavior.floating,
+                                          content: Container(
+                                            width: 50,
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: [
+                                                Icon(Icons.close,
+                                                    color: Colors.white,
+                                                    size: 30),
+                                                Text('Something is went wrong'),
+                                              ],
+                                            ),
                                           ),
                                         ),
+                                      );
+                                    } else if (value.statusCode == 200) {
+                                      setState(() {
+                                        phoneLoading = false;
+                                      });
+                                      updatePre11(phoneNumber1);
+                                    }
+                                  });
+                                } catch (e) {
+                                  setState(() {
+                                    phoneLoading = false;
+                                  });
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      margin: EdgeInsets.only(bottom: 10),
+                                      backgroundColor: Colors.red,
+                                      behavior: SnackBarBehavior.floating,
+                                      content: Container(
+                                        width: 50,
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            Icon(Icons.close,
+                                                color: Colors.white, size: 30),
+                                            Text('Something went wrong'),
+                                          ],
+                                        ),
                                       ),
-                                    );
-                                  } else if (value.statusCode == 200) {
-                                    setState(() {
-                                      phoneLoading = false;
-                                    });
-                                    updatePre11(phoneNumber1);
-                                  }
-                                });
+                                    ),
+                                  );
+                                }
                               },
                               child: Container(
                                 height: 50,
@@ -688,137 +753,176 @@ class _UpdateProfileState extends State<UpdateProfile> {
                                       ),
                                 GestureDetector(
                                   onTap: () {
-                                    setState(() {
-                                      passwordLoading = true;
-                                    });
-                                    var data = {
-                                      'old_password': oldPassword,
-                                      'password': password,
-                                      'password_confirmation': confirmPassword,
-                                    };
+                                    try {
+                                      setState(() {
+                                        passwordLoading = true;
+                                      });
+                                      var data = {
+                                        'old_password': oldPassword,
+                                        'password': password,
+                                        'password_confirmation':
+                                            confirmPassword,
+                                      };
 
-                                    http
-                                        .post(
-                                      Uri.parse('$url/update-password'),
-                                      body: jsonEncode(data),
-                                      headers: _setHeaders(),
-                                    )
-                                        .then((value) {
-                                      if (value.statusCode == 200) {
-                                        ScaffoldMessenger.of(context)
-                                            .showSnackBar(
-                                          SnackBar(
-                                            margin: EdgeInsets.only(
-                                                bottom: MediaQuery.of(context)
-                                                        .size
-                                                        .height -
-                                                    140),
-                                            backgroundColor: Colors.cyan,
-                                            behavior: SnackBarBehavior.floating,
-                                            content: Container(
-                                              height: 30,
-                                              width: 50,
-                                              child: Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.center,
-                                                children: [
-                                                  Icon(Icons.verified_sharp,
-                                                      color: Colors.white,
-                                                      size: 30),
-                                                  Container(width: 20),
-                                                  Text('Successfully Updated!'),
-                                                ],
+                                      http
+                                          .post(
+                                        Uri.parse('$url/update-password'),
+                                        body: jsonEncode(data),
+                                        headers: _setHeaders(),
+                                      )
+                                          .then((value) {
+                                        if (value.statusCode == 200) {
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(
+                                            SnackBar(
+                                              margin: EdgeInsets.only(
+                                                  bottom: MediaQuery.of(context)
+                                                          .size
+                                                          .height -
+                                                      140),
+                                              backgroundColor: Colors.cyan,
+                                              behavior:
+                                                  SnackBarBehavior.floating,
+                                              content: Container(
+                                                height: 30,
+                                                width: 50,
+                                                child: Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.center,
+                                                  children: [
+                                                    Icon(Icons.verified_sharp,
+                                                        color: Colors.white,
+                                                        size: 30),
+                                                    Container(width: 20),
+                                                    Text(
+                                                        'Successfully Updated!'),
+                                                  ],
+                                                ),
                                               ),
                                             ),
-                                          ),
-                                        );
-                                        Navigator.pop(context);
-                                      } else if (value.statusCode == 422) {
-                                        final response =
-                                            json.decode(value.body);
+                                          );
+                                          Navigator.pop(context);
+                                        } else if (value.statusCode == 422) {
+                                          final response =
+                                              json.decode(value.body);
 
-                                        Map<String, dynamic> error_list =
-                                            response;
-                                        error_list.keys.forEach((element) {
-                                          if (element == 'password') {
-                                            passwordMessage =
-                                                response['password'][0];
-                                          }
-                                          if (element == 'old_password') {
-                                            oldPasswordMessage =
-                                                response['old_password'][0];
-                                          }
-                                          if (element ==
-                                              'password_confirmation') {
-                                            confirmPasswordMessage = response[
-                                                'password_confirmation'][0];
-                                          }
+                                          Map<String, dynamic> error_list =
+                                              response;
+                                          error_list.keys.forEach((element) {
+                                            if (element == 'password') {
+                                              passwordMessage =
+                                                  response['password'][0];
+                                            }
+                                            if (element == 'old_password') {
+                                              oldPasswordMessage =
+                                                  response['old_password'][0];
+                                            }
+                                            if (element ==
+                                                'password_confirmation') {
+                                              confirmPasswordMessage = response[
+                                                  'password_confirmation'][0];
+                                            }
+                                          });
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(
+                                            SnackBar(
+                                              margin: EdgeInsets.only(
+                                                  bottom: MediaQuery.of(context)
+                                                          .size
+                                                          .height -
+                                                      140),
+                                              backgroundColor: Colors.red,
+                                              behavior:
+                                                  SnackBarBehavior.floating,
+                                              content: Container(
+                                                height: 30,
+                                                width: 50,
+                                                child: Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.center,
+                                                  children: [
+                                                    Icon(Icons.close,
+                                                        color: Colors.white,
+                                                        size: 30),
+                                                    Container(width: 20),
+                                                    Text(
+                                                        'Oops Something is went wrong...'),
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                          );
+                                        } else if (value.statusCode == 401) {
+                                          oldPasswordMessage =
+                                              "incorrect password";
+
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(
+                                            SnackBar(
+                                              margin: EdgeInsets.only(
+                                                  bottom: MediaQuery.of(context)
+                                                          .size
+                                                          .height -
+                                                      110),
+                                              backgroundColor: Colors.red,
+                                              behavior:
+                                                  SnackBarBehavior.floating,
+                                              content: Container(
+                                                height: 30,
+                                                width: 50,
+                                                child: Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.center,
+                                                  children: [
+                                                    Icon(Icons.close,
+                                                        color: Colors.white,
+                                                        size: 30),
+                                                    Container(width: 20),
+                                                    Text(
+                                                        'Oops Something is went wrong...'),
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                          );
+                                        }
+                                        setState(() {
+                                          passwordLoading = false;
                                         });
-                                        ScaffoldMessenger.of(context)
-                                            .showSnackBar(
-                                          SnackBar(
-                                            margin: EdgeInsets.only(
-                                                bottom: MediaQuery.of(context)
-                                                        .size
-                                                        .height -
-                                                    140),
-                                            backgroundColor: Colors.red,
-                                            behavior: SnackBarBehavior.floating,
-                                            content: Container(
-                                              height: 30,
-                                              width: 50,
-                                              child: Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.center,
-                                                children: [
-                                                  Icon(Icons.close,
-                                                      color: Colors.white,
-                                                      size: 30),
-                                                  Container(width: 20),
-                                                  Text(
-                                                      'Oops Something is went wrong...'),
-                                                ],
-                                              ),
-                                            ),
-                                          ),
-                                        );
-                                      } else if (value.statusCode == 401) {
-                                        oldPasswordMessage =
-                                            "incorrect password";
-
-                                        ScaffoldMessenger.of(context)
-                                            .showSnackBar(
-                                          SnackBar(
-                                            margin: EdgeInsets.only(
-                                                bottom: MediaQuery.of(context)
-                                                        .size
-                                                        .height -
-                                                    110),
-                                            backgroundColor: Colors.red,
-                                            behavior: SnackBarBehavior.floating,
-                                            content: Container(
-                                              height: 30,
-                                              width: 50,
-                                              child: Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.center,
-                                                children: [
-                                                  Icon(Icons.close,
-                                                      color: Colors.white,
-                                                      size: 30),
-                                                  Container(width: 20),
-                                                  Text(
-                                                      'Oops Something is went wrong...'),
-                                                ],
-                                              ),
-                                            ),
-                                          ),
-                                        );
-                                      }
+                                      });
+                                    } catch (e) {
                                       setState(() {
                                         passwordLoading = false;
                                       });
-                                    });
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(
+                                        SnackBar(
+                                          margin: EdgeInsets.only(
+                                              bottom: MediaQuery.of(context)
+                                                      .size
+                                                      .height -
+                                                  110),
+                                          backgroundColor: Colors.red,
+                                          behavior: SnackBarBehavior.floating,
+                                          content: Container(
+                                            height: 30,
+                                            width: 50,
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: [
+                                                Icon(Icons.close,
+                                                    color: Colors.white,
+                                                    size: 30),
+                                                Container(width: 20),
+                                                Text(
+                                                    'Oops Something is went wrong...'),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                      );
+                                    }
                                   },
                                   child: Container(
                                     height: 50,

@@ -30,6 +30,7 @@ class _LoginState extends State<Login> with TickerProviderStateMixin {
   void initState() {
     setState(() {
       rememberMe = true;
+
       SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
         statusBarIconBrightness: Brightness.light,
         systemNavigationBarColor: Colors.white, // navigation bar color
@@ -79,6 +80,8 @@ class _LoginState extends State<Login> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setEnabledSystemUIOverlays([SystemUiOverlay.bottom]);
+    SystemChrome.setEnabledSystemUIOverlays([SystemUiOverlay.top]);
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(

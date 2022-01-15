@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:techino_app/intro/utilities/styles.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class SettingScreen extends StatefulWidget {
   const SettingScreen({Key? key}) : super(key: key);
@@ -44,42 +45,12 @@ class _SettingScreenState extends State<SettingScreen> {
                   width: double.infinity,
                   child: Center(
                     child: Text(
-                      'Account Setting',
+                      "accounting_setting".tr(),
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 18,
                       ),
                     ),
-                  ),
-                ),
-                Container(
-                  margin: EdgeInsets.only(top: 25, bottom: 10),
-                  padding: EdgeInsets.symmetric(horizontal: 25),
-                  decoration: BoxDecoration(),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Row(
-                        children: [
-                          Icon(
-                            Icons.lock,
-                            color: primary.color,
-                          ),
-                          Container(
-                            margin: EdgeInsets.only(left: 15),
-                            child: Text(
-                              'Change Password',
-                              style: TextStyle(
-                                color: primary.color,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 18,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      Icon(Icons.arrow_forward_ios, size: 18)
-                    ],
                   ),
                 ),
                 Divider(indent: 20, endIndent: 20),
@@ -98,7 +69,7 @@ class _SettingScreenState extends State<SettingScreen> {
                           Container(
                             margin: EdgeInsets.only(left: 15),
                             child: Text(
-                              'Notification',
+                              "notification".tr(),
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 color: primary.color,
@@ -131,7 +102,7 @@ class _SettingScreenState extends State<SettingScreen> {
                           Container(
                             margin: EdgeInsets.only(left: 15),
                             child: Text(
-                              'Privacy Setting',
+                              "privacy_setting".tr(),
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 color: primary.color,
@@ -164,7 +135,7 @@ class _SettingScreenState extends State<SettingScreen> {
                           Container(
                             margin: EdgeInsets.only(left: 15),
                             child: Text(
-                              'Terms and Condition',
+                              "term_and_condition".tr(),
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 color: primary.color,
@@ -188,7 +159,7 @@ class _SettingScreenState extends State<SettingScreen> {
             margin: EdgeInsets.only(bottom: 10),
             child: Center(
               child: Text(
-                'More Option',
+                "more_option".tr(),
                 style: TextStyle(
                   fontSize: 18,
                   color: primary.color,
@@ -227,7 +198,7 @@ class _SettingScreenState extends State<SettingScreen> {
                           Container(
                             margin: EdgeInsets.only(left: 15),
                             child: Text(
-                              'Language',
+                              "language".tr(),
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 color: primary.color,
@@ -291,7 +262,7 @@ class _SettingScreenState extends State<SettingScreen> {
                           Container(
                             margin: EdgeInsets.only(left: 15),
                             child: Text(
-                              'About us',
+                              "about_us".tr(),
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 color: primary.color,
@@ -323,7 +294,7 @@ class _SettingScreenState extends State<SettingScreen> {
                           Container(
                             margin: EdgeInsets.only(left: 15),
                             child: Text(
-                              'Contact us',
+                              "Contact_us".tr(),
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 color: primary.color,
@@ -355,7 +326,7 @@ class _SettingScreenState extends State<SettingScreen> {
                           Container(
                             margin: EdgeInsets.only(left: 15),
                             child: Text(
-                              'Help',
+                              "help".tr(),
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 color: primary.color,
@@ -387,7 +358,7 @@ class _SettingScreenState extends State<SettingScreen> {
                           Container(
                             margin: EdgeInsets.only(left: 15),
                             child: Text(
-                              'Logout',
+                              "logout".tr(),
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 color: primary.color,

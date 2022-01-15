@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:techino_app/Controller/user_controller.dart';
 import 'package:techino_app/intro/utilities/styles.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class Top_Card extends StatefulWidget {
   @override
@@ -51,7 +52,7 @@ class _Top_CardState extends State<Top_Card> {
                     !token
                         ? Container(
                             child: Text(
-                              "Welcome ...",
+                              "welcom".tr(),
                               style: TextStyle(
                                 color: secondary.color,
                                 // fontFamily: rob,
@@ -74,7 +75,7 @@ class _Top_CardState extends State<Top_Card> {
                     Container(
                       margin: EdgeInsets.only(top: 10),
                       child: Text(
-                        "What do you want to  find today ?",
+                        "what_do_you_find_today".tr(),
                         style: TextStyle(
                           color: Color(0xFFcbc5be),
                           fontSize: 18.5,
@@ -117,7 +118,7 @@ class _Top_CardState extends State<Top_Card> {
                   color: primary.color,
                 ),
                 border: InputBorder.none,
-                hintText: "Search...",
+                hintText: "search".tr(),
               ),
             ),
           ),

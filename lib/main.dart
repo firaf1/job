@@ -1,19 +1,22 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+ 
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:techino_app/Controller/user_controller.dart';
 import 'package:techino_app/mainScreen.dart';
 import 'package:techino_app/no_connection.dart';
- 
+
 // import 'package:techino_app/first/mainScreen.dart';
 
 Future<void> main() async {
   UserController userController = new UserController();
   userController.getSharedPrefs();
   WidgetsFlutterBinding.ensureInitialized();
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  String login = prefs.getString("token1").toString();
-  print("login:" + login.toString());
+  await EasyLocalization.ensureInitialized();
 
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+
+// flutter run -v -d chrome
 //   to hide only bottom bar:
   // SystemChrome.setEnabledSystemUIOverlays([SystemUiOverlay.top]);
   // to hide only status bar:
@@ -22,7 +25,20 @@ Future<void> main() async {
 // SystemChrome.setEnabledSystemUIOverlays ([]);
 
   // runApp(MaterialApp(home: login == "" ? NoConnection() : ServerError()));
-  runApp(MyApp());
+  runApp(
+    EasyLocalization(
+      path: 'assets/translations',
+      supportedLocales: [
+        Locale('am'),
+        Locale('en'),
+        Locale('fr'),
+      ],
+      saveLocale: true,
+      startLocale: Locale('en'),
+      fallbackLocale: Locale('en'),
+      child: MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -35,6 +51,9 @@ class MyApp extends StatelessWidget {
     //   statusBarColor: primary.color, // status bar color
     // ));
     return MaterialApp(
+      localizationsDelegates: context.localizationDelegates,
+      supportedLocales: context.supportedLocales,
+      locale: context.locale,
       title: 'Flutter Demo',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
@@ -66,3 +85,4 @@ class MyApp1 extends StatelessWidget {
     );
   }
 }
+ 

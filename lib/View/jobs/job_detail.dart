@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:techino_app/Model/Jobs.dart';
 import 'package:techino_app/intro/utilities/styles.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class JobDetail extends StatefulWidget {
   List<Jobs> jobs_list = [];
@@ -130,7 +131,7 @@ class _JobDetailState extends State<JobDetail> {
                   left: 10,
                 ),
                 child: Text(
-                  'Description About job',
+                  "Detail_about_job".tr(),
                   style: TextStyle(
                     color: Colors.black,
                     fontSize: 16,

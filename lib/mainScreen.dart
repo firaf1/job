@@ -9,6 +9,8 @@ import 'package:techino_app/View/first/homeScreen.dart';
 import 'package:techino_app/intro/utilities/styles.dart';
 import 'package:techino_app/View/jobs/main_jobs_screen.dart';
 import 'package:techino_app/View/setting/setting.dart';
+import 'package:easy_localization/easy_localization.dart';
+import 'package:techino_app/scholarship/scholarship.dart';
 
 UserController userController = new UserController();
 
@@ -43,17 +45,14 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
   var pages = [
     HomeScreen(),
     Main_Jobs_Screen(),
-    ProfileScreen(),
+    Scholarship(),
     SettingScreen()
   ];
   @override
   Widget build(BuildContext context) {
     // SystemChrome.setEnabledSystemUIOverlays([SystemUiOverlay.bottom]);
-    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-      statusBarIconBrightness: Brightness.light,
-      systemNavigationBarColor: primary.color, // navigation bar color
-      statusBarColor: primary.color, // status bar color
-    ));
+    SystemChrome.setEnabledSystemUIOverlays([]);
+   
     TabController tabController = TabController(length: 3, vsync: this);
     return Scaffold(
       backgroundColor: Colors.white,
@@ -66,27 +65,27 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
         items: <BottomNavyBarItem>[
           BottomNavyBarItem(
             icon: Icon(Icons.home),
-            title: Text('Home'),
+            title: Text('home'.tr()),
             activeColor: Colors.red,
             textAlign: TextAlign.center,
           ),
           BottomNavyBarItem(
             icon: Icon(Icons.work_outline_rounded),
-            title: Text('Jobs'),
+            title: Text('job'.tr()),
             activeColor: Colors.purpleAccent,
             textAlign: TextAlign.center,
           ),
           BottomNavyBarItem(
             icon: Icon(Icons.person_outline_rounded),
             title: Text(
-              'Profile',
+              'scholarship'.tr(),
             ),
             activeColor: Colors.pink,
             textAlign: TextAlign.center,
           ),
           BottomNavyBarItem(
             icon: Icon(Icons.settings),
-            title: Text('Settings'),
+            title: Text('setting'.tr()),
             activeColor: Colors.blue,
             textAlign: TextAlign.center,
           ),
@@ -96,22 +95,32 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
         brightness: Brightness.light,
         backwardsCompatibility: false,
         systemOverlayStyle: SystemUiOverlayStyle(statusBarColor: primary.color),
-        leading: InkWell(
-          onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (BuildContext conte) => Login(),
-              ),
-            );
-          },
-          child: !token
-              ? Icon(
+        leading: !token
+            ? InkWell(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (BuildContext conte) => Login(),
+                    ),
+                  );
+                },
+                child: Icon(
                   Icons.person_add_alt,
                   size: 30,
                   color: Colors.white,
-                )
-              : Container(
+                ),
+              )
+            : InkWell(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (BuildContext conte) => ProfileScreen(),
+                    ),
+                  );
+                },
+                child: Container(
                   height: 10,
                   width: 10,
                   decoration: BoxDecoration(
@@ -133,8 +142,8 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
                     ),
                   ),
                 ),
-        ),
-        title: Text("Logo Here",
+              ),
+        title: Text("Logo here",
             style: TextStyle(
               color: Color(0xFFFFFFFF),
               fontWeight: FontWeight.bold,
@@ -148,12 +157,52 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
               color: Color(0xFFFFFFFF),
             ),
           ),
-          IconButton(
-            onPressed: () {},
-            icon: Icon(
-              Icons.favorite,
-              color: Color(0xFFFFFFFF),
-            ),
+          PopupMenuButton(
+            icon: Icon(Icons.more_vert),
+            itemBuilder: (context) => [
+              PopupMenuItem(
+                child: GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      context.locale = Locale('en');
+                      Navigator.pushReplacement(
+                          context,
+                          new MaterialPageRoute(
+                              builder: (context) => new MainScreen()));
+                    });
+                  },
+                  child: Text("English"),
+                ),
+              ),
+              PopupMenuItem(
+                child: GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      context.locale = Locale('am');
+                      Navigator.pushReplacement(
+                          context,
+                          new MaterialPageRoute(
+                              builder: (context) => new MainScreen()));
+                    });
+                  },
+                  child: Text("Amharic"),
+                ),
+              ),
+              PopupMenuItem(
+                child: GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      context.locale = Locale('fr');
+                      Navigator.pushReplacement(
+                          context,
+                          new MaterialPageRoute(
+                              builder: (context) => new MainScreen()));
+                    });
+                  },
+                  child: Text("Afan oromo"),
+                ),
+              ),
+            ],
           ),
         ],
         backgroundColor: primary.color,

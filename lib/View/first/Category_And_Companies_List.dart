@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:techino_app/Controller/Job_controller.dart';
 import 'package:techino_app/Model/Jobs_category.dart';
 import 'package:techino_app/Model/companies.dart';
-import 'package:techino_app/View/first/jobCategory.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:techino_app/intro/utilities/styles.dart';
 
 class CompaniesList extends StatefulWidget {
@@ -43,7 +43,7 @@ class _CompaniesListState extends State<CompaniesList>
                   height: 30,
                   child: Tab(
                     child: Text(
-                      'Companies',
+                      "company".tr(),
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                       ),
@@ -53,7 +53,7 @@ class _CompaniesListState extends State<CompaniesList>
                 ),
                 Container(
                   child: Tab(
-                    text: 'Categories',
+                    text: "Categories".tr(),
                   ),
                 ),
               ],
@@ -128,7 +128,7 @@ class _CompaniesListState extends State<CompaniesList>
                                           child: CircularProgressIndicator(
                                               color: primary.color)),
                                       errorWidget: (context, url, error) =>
-                                          Icon(Icons.error, color:Colors.red),
+                                          Icon(Icons.error, color: Colors.red),
                                     ),
                                   )
                                 else
@@ -162,7 +162,8 @@ class _CompaniesListState extends State<CompaniesList>
                             Container(
                               margin: EdgeInsets.only(left: 10, top: 5),
                               child: Text(
-                                "${widget.comp_list[index].totalJobs} Jobs",
+                                "${widget.comp_list[index].totalJobs} " +
+                                    "jobs".tr(),
                                 style: TextStyle(
                                   color: Color(0xFFbacdcb),
                                   fontSize: 15,
@@ -228,8 +229,12 @@ class _CompaniesListState extends State<CompaniesList>
                                     placeholder: (context, url) => Center(
                                         child: CircularProgressIndicator(
                                             color: primary.color)),
-                                    errorWidget: (context, url, error,) =>
-                                        Icon(Icons.error, color:Colors.red),
+                                    errorWidget: (
+                                      context,
+                                      url,
+                                      error,
+                                    ) =>
+                                        Icon(Icons.error, color: Colors.red),
                                   ),
                                 ),
                                 Container(
@@ -261,7 +266,8 @@ class _CompaniesListState extends State<CompaniesList>
                             Container(
                               margin: EdgeInsets.only(left: 10, top: 5),
                               child: Text(
-                                "${widget.comp_list[index].totalJobs} Jobs",
+                                "${widget.comp_list[index].totalJobs} " +
+                                    "jobs".tr(),
                                 style: TextStyle(
                                   color: Color(0xFFbacdcb),
                                   fontSize: 15,

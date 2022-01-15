@@ -1,6 +1,5 @@
 import 'dart:convert';
 
- 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -60,11 +59,13 @@ class _SignupState extends State<Signup> {
       passwordConfirm = "";
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-      statusBarIconBrightness: Brightness.light,
-      systemNavigationBarColor: Colors.white, // navigation bar color
-      statusBarColor: Colors.white, // status bar color
-    ));
+    // SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+    //   statusBarIconBrightness: Brightness.light,
+    //   systemNavigationBarColor: Colors.white, // navigation bar color
+    //   statusBarColor: Colors.white, // status bar color
+    // ));
+    SystemChrome.setEnabledSystemUIOverlays([SystemUiOverlay.bottom]);
+    SystemChrome.setEnabledSystemUIOverlays([SystemUiOverlay.top]);
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
@@ -260,7 +261,6 @@ class _SignupState extends State<Signup> {
                             )
                           else
                             SizedBox(height: 7),
-                        
                           Container(
                             padding: EdgeInsets.symmetric(horizontal: 20),
                             margin: EdgeInsets.only(bottom: 3, top: 3),

@@ -10,7 +10,7 @@ import 'package:techino_app/View/first/sponser.dart';
 import 'package:techino_app/View/jobs/Job_lists.dart';
 import 'package:techino_app/intro/utilities/styles.dart';
 import 'package:techino_app/server_error.dart';
-
+import 'package:easy_localization/easy_localization.dart';
 import 'Top_nav_card.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -83,7 +83,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(10)),
                           child: Text(
-                            'Sponsors',
+                            "sponser".tr(),
                             style: TextStyle(
                               color: Colors.black45,
                               fontSize: 14,
@@ -111,7 +111,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 borderRadius: BorderRadius.circular(10),
                               ),
                               child: Text(
-                                "Jobs You May Be Interested",
+                                "job_you_may_interested_in".tr(),
                                 style: TextStyle(
                                   color: primary.color,
                                   fontSize: 13,
