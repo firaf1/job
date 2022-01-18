@@ -59,12 +59,12 @@ class _SignupState extends State<Signup> {
       passwordConfirm = "";
   @override
   Widget build(BuildContext context) {
-    // SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-    //   statusBarIconBrightness: Brightness.light,
-    //   systemNavigationBarColor: Colors.white, // navigation bar color
-    //   statusBarColor: Colors.white, // status bar color
-    // ));
-    SystemChrome.setEnabledSystemUIOverlays([SystemUiOverlay.bottom]);
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+      statusBarIconBrightness: Brightness.light,
+      // systemNavigationBarColor: Colors.white, // navigation bar color
+      statusBarColor: Colors.white, // status bar color
+    ));
+    // SystemChrome.setEnabledSystemUIOverlays([SystemUiOverlay.bottom]);
     SystemChrome.setEnabledSystemUIOverlays([SystemUiOverlay.top]);
     return Scaffold(
       backgroundColor: Colors.white,

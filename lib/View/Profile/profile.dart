@@ -5,6 +5,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:techino_app/Controller/user_controller.dart';
+import 'package:techino_app/View/Auth/Login/login.dart';
 import 'package:techino_app/View/Profile/category_update.dart';
 import 'package:techino_app/View/Profile/email_update.dart';
 
@@ -30,6 +31,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   addToSharedPre(response) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
+      print("profile picture.....${response['image_path']}");
       prefs.setString('image_path', response['image_path']);
       userController.imagePath = response['image_path'];
       imagePath = response['image_path'];
@@ -48,7 +50,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             children: [
               Icon(Icons.verified_sharp, color: Colors.white, size: 30),
               Container(width: 20),
-              Text('Successfully Updated '),
+              Text('Successfully Updated ${response['image_path']}'),
             ],
           ),
         ),
@@ -152,7 +154,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-         
         elevation: 0,
         backgroundColor: primary.color,
         title: Text('Profile'),

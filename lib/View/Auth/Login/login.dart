@@ -41,7 +41,7 @@ class _LoginState extends State<Login> with TickerProviderStateMixin {
     super.initState();
   }
 
-  addToSharedPre(response) async {
+    addToSharedPre(response) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
       prefs.setString('token', response['token']);

@@ -50,9 +50,13 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
   ];
   @override
   Widget build(BuildContext context) {
-    // SystemChrome.setEnabledSystemUIOverlays([SystemUiOverlay.bottom]);
-    SystemChrome.setEnabledSystemUIOverlays([]);
-   
+  
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+      statusBarIconBrightness: Brightness.light,
+      systemNavigationBarColor: Colors.white, // navigation bar color
+      statusBarColor: primary.color, // status bar color
+    ));
+
     TabController tabController = TabController(length: 3, vsync: this);
     return Scaffold(
       backgroundColor: Colors.white,
@@ -76,7 +80,7 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
             textAlign: TextAlign.center,
           ),
           BottomNavyBarItem(
-            icon: Icon(Icons.person_outline_rounded),
+            icon: Icon(Icons.school_rounded),
             title: Text(
               'scholarship'.tr(),
             ),
@@ -209,6 +213,7 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
         elevation: 0.0,
       ),
       body: pages[_currentIndex],
+      // body:Scholarship(),
     );
   }
 }

@@ -23,7 +23,7 @@ class _ServerErrorState extends State<ServerError> {
                 height: MediaQuery.of(context).size.height - 250,
                 decoration: BoxDecoration(
                   image: DecorationImage(
-                    image: AssetImage('assets/images/No_connetion.gif'),
+                    image: AssetImage('assets/images/No_connection2.gif'),
                     fit: BoxFit.contain,
                   ),
                 ),

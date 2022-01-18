@@ -27,7 +27,12 @@ class _Main_Jobs_ScreenState extends State<Main_Jobs_Screen> {
   void initState() {
     jobContorller.isinitialized++;
 
-    jobContorller.fetchJobsCategory();
+    jobContorller.fetchJobsCategory().then((value) {
+      setState(() {
+        jobContorller.isLoading = false;
+        // jobContorller.jobs_category.addAll(jobContorller.jobs_category);
+      });
+    });
     try {
       jobContorller.fetchJobs().then((value) {
         setState(() {
@@ -43,252 +48,290 @@ class _Main_Jobs_ScreenState extends State<Main_Jobs_Screen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFFf1f1f1),
+      backgroundColor: primary.color,
       body: jobContorller.isServerError
           ? ServerError()
-          : Column(
-              children: [
-                Container(
-                  margin: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-                  decoration: BoxDecoration(
-                      boxShadow: [
-                        BoxShadow(
-                          color: Color.fromRGBO(157, 157, 157, 1),
-                          offset: Offset(0, 0.5),
-                          spreadRadius: 5,
-                          blurRadius: 8,
-                        )
-                      ],
-                      color: Colors.white,
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(12),
-                        topRight: Radius.circular(12),
-                      )),
-                  width: double.infinity,
-                  height: 40,
-                  child: ListView.builder(
-                      scrollDirection: Axis.horizontal,
-                      itemCount: jobContorller.jobs_category.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        return index == 0
-                            ? Row(
-                                children: [
-                                  InkWell(
-                                    onTap: () {
-                                      setState(() {
-                                        jobContorller.isLoaded = false;
-                                        Active_bar = -1;
-                                      });
-                                      jobContorller.fetchJobs();
-                                    },
-                                    child: Container(
-                                      padding:
-                                          EdgeInsets.symmetric(horizontal: 10),
-                                      margin: EdgeInsets.symmetric(
-                                          horizontal: 8, vertical: 4),
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(6),
-                                        color: Active_bar == -1
-                                            ? secondary.color
-                                            : Color.fromRGBO(255, 255, 255, 0),
-                                      ),
-                                      child: Center(
-                                        child: Text(
-                                          "All",
-                                          style: TextStyle(
-                                            fontSize: 15,
-                                            fontWeight: FontWeight.w600,
-                                            color: Active_bar == -1
-                                                ? primary.color
-                                                : Colors.black38,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                  InkWell(
-                                    onTap: () {
-                                      setState(() {
-                                        jobContorller.isLoaded = false;
-                                      });
-                                      jobContorller
-                                          .fetchJobs(
-                                              category: jobContorller
-                                                  .jobs_category[index].id)
-                                          .then((value) => setState(() {
-                                                jobContorller.isLoaded = true;
-
-                                                // jobContorller.jobs_category.addAll(jobContorller.jobs_category);
-                                                Active_bar = index;
-                                              }));
-                                    },
-                                    child: Stack(
-                                      alignment: Alignment.topRight,
-                                      children: [
-                                        Container(
-                                          padding: EdgeInsets.symmetric(
-                                              horizontal: 10),
-                                          margin: EdgeInsets.symmetric(),
-                                          decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(6),
-                                            color: Active_bar == index
-                                                ? secondary.color
-                                                : Color.fromRGBO(
-                                                    255, 255, 255, 0),
-                                          ),
-                                          child: Center(
-                                            child: Text(
-                                              jobContorller
-                                                  .jobs_category[index].name,
-                                              style: TextStyle(
-                                                fontSize: 15,
-                                                fontWeight: FontWeight.w600,
-                                                color: Active_bar == index
-                                                    ? primary.color
-                                                    : Colors.black38,
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                        jobContorller.jobs_category[index]
-                                                    .totalJobs !=
-                                                0
-                                            ? Container(
-                                                margin:
-                                                    EdgeInsets.only(left: 10),
-                                                padding: EdgeInsets.symmetric(
-                                                    horizontal: 5),
-                                                decoration: BoxDecoration(
-                                                  borderRadius:
-                                                      BorderRadius.circular(7),
-                                                  color: Colors.red,
-                                                ),
-                                                child: Text(
-                                                  jobContorller
-                                                      .jobs_category[index]
-                                                      .totalJobs
-                                                      .toString(),
-                                                  style: TextStyle(
-                                                      color: Colors.white,
-                                                      fontSize: 13),
-                                                ),
-                                              )
-                                            : Container(),
-                                      ],
-                                    ),
-                                  )
-                                ],
-                              )
-                            : InkWell(
-                                onTap: () {
-                                  setState(() {
-                                    jobContorller.isLoaded = false;
-                                  });
-                                  jobContorller
-                                      .fetchJobs(
-                                          category: jobContorller
-                                              .jobs_category[index].id)
-                                      .then((value) => setState(() {
-                                            jobContorller.isLoaded = true;
-
-                                            // jobContorller.jobs_category.addAll(jobContorller.jobs_category);
-                                            Active_bar = index;
-                                          }));
-                                },
-                                child: Stack(
-                                  alignment: Alignment.topRight,
+          : SingleChildScrollView(
+              child: Column(
+                children: [
+                  Container(
+                    margin: EdgeInsets.only(top: 10, bottom: 10),
+                    height: 35,
+                    width: (MediaQuery.of(context).size.width) - 20,
+                    decoration: BoxDecoration(),
+                    child: ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        itemCount: jobContorller.jobs_category.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          return index == 0
+                              ? Row(
                                   children: [
                                     Container(
-                                      padding:
-                                          EdgeInsets.symmetric(horizontal: 10),
-                                      margin: EdgeInsets.symmetric(vertical: 5),
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(6),
-                                        color: Active_bar == index
-                                            ? secondary.color
-                                            : Color.fromRGBO(255, 255, 255, 0),
-                                      ),
-                                      child: Center(
-                                        child: Text(
+                                      height: 30,
+                                      child: InkWell(
+                                        onTap: () {
+                                          setState(() {
+                                            jobContorller.isLoaded = false;
+                                            Active_bar = -1;
+                                          });
                                           jobContorller
-                                              .jobs_category[index].name,
-                                          style: TextStyle(
-                                            fontSize: 15,
-                                            fontWeight: FontWeight.w600,
-                                            color: Active_bar == index
-                                                ? primary.color
-                                                : Colors.black38,
+                                              .fetchJobs()
+                                              .then((value) {
+                                            setState(() {
+                                              jobContorller.isLoaded = true;
+                                              Active_bar = -1;
+                                            });
+                                          });
+                                        },
+                                        child: Container(
+                                          padding: EdgeInsets.symmetric(
+                                              horizontal: 12, vertical: 5),
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(5),
+                                            color: Active_bar == -1
+                                                ? Color(0xFF1313bb)
+                                                : primary.color,
+                                          ),
+                                          child: Column(
+                                            children: [
+                                              Text(
+                                                'All',
+                                                style: TextStyle(
+                                                  color: Active_bar == -1
+                                                      ? Colors.white
+                                                      : Color(0xFF8888e1),
+                                                ),
+                                              )
+                                            ],
                                           ),
                                         ),
                                       ),
                                     ),
-                                    jobContorller.jobs_category[index]
-                                                .totalJobs !=
-                                            0
-                                        ? Container(
-                                            margin: EdgeInsets.only(left: 10),
-                                            padding: EdgeInsets.symmetric(
-                                                horizontal: 5),
-                                            decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(7),
-                                              color: Colors.red,
-                                            ),
-                                            child: Text(
-                                              jobContorller.jobs_category[index]
-                                                  .totalJobs
-                                                  .toString(),
-                                              style: TextStyle(
-                                                  color: Colors.white,
-                                                  fontSize: 13),
-                                            ),
-                                          )
-                                        : Container(),
+                                    Container(
+                                      height: 30,
+                                      child: InkWell(
+                                        onTap: () {
+                                          setState(() {
+                                            jobContorller.isLoaded = false;
+                                          });
+                                          jobContorller
+                                              .fetchJobs(
+                                                  category: jobContorller
+                                                      .jobs_category[index].id)
+                                              .then((value) => setState(() {
+                                                    jobContorller.isLoaded =
+                                                        true;
+
+                                                    // jobContorller.jobs_category.addAll(jobContorller.jobs_category);
+                                                    Active_bar = index;
+                                                  }));
+                                        },
+                                        child: Container(
+                                          padding: EdgeInsets.symmetric(
+                                              horizontal: 12, vertical: 5),
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(5),
+                                            color: Active_bar == index
+                                                ? Color(0xFF1313bb)
+                                                : primary.color,
+                                          ),
+                                          margin: EdgeInsets.symmetric(
+                                              horizontal: 7),
+                                          child: Column(
+                                            children: [
+                                              Row(
+                                                children: [
+                                                  Text(
+                                                    jobContorller
+                                                        .jobs_category[index]
+                                                        .name,
+                                                    style: TextStyle(
+                                                      color: Active_bar == index
+                                                          ? Colors.white
+                                                          : Color(0xFF8888e1),
+                                                    ),
+                                                  ),
+                                                  jobContorller
+                                                              .jobs_category[
+                                                                  index]
+                                                              .totalJobs !=
+                                                          0
+                                                      ? Container(
+                                                          margin:
+                                                              EdgeInsets.only(
+                                                                  left: 3),
+                                                          padding: EdgeInsets
+                                                              .symmetric(
+                                                                  horizontal:
+                                                                      5),
+                                                          decoration:
+                                                              BoxDecoration(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        7),
+                                                            color: Colors.red,
+                                                          ),
+                                                          child: Text(
+                                                            jobContorller
+                                                                .jobs_category[
+                                                                    index]
+                                                                .totalJobs
+                                                                .toString(),
+                                                            style: TextStyle(
+                                                                color: Colors
+                                                                    .white,
+                                                                fontSize: 13),
+                                                          ),
+                                                        )
+                                                      : Container(),
+                                                ],
+                                              )
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    )
+                                  ],
+                                )
+                              : Row(
+                                  children: [
+                                    Container(
+                                      height: 30,
+                                      child: InkWell(
+                                        onTap: () {
+                                          setState(() {
+                                            jobContorller.isLoaded = false;
+                                          });
+                                          jobContorller
+                                              .fetchJobs(
+                                                  category: jobContorller
+                                                      .jobs_category[index].id)
+                                              .then((value) => setState(() {
+                                                    jobContorller.isLoaded =
+                                                        true;
+
+                                                    // jobContorller.jobs_category.addAll(jobContorller.jobs_category);
+                                                    Active_bar = index;
+                                                  }));
+                                        },
+                                        child: Container(
+                                          padding: EdgeInsets.symmetric(
+                                              horizontal: 8, vertical: 5),
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(5),
+                                            color: Active_bar == index
+                                                ? Color(0xFF1313bb)
+                                                : primary.color,
+                                          ),
+                                          margin: EdgeInsets.symmetric(
+                                              horizontal: 7),
+                                          child: Column(
+                                            children: [
+                                              Row(
+                                                children: [
+                                                  Text(
+                                                    jobContorller
+                                                        .jobs_category[index]
+                                                        .name,
+                                                    style: TextStyle(
+                                                      color: Active_bar == index
+                                                          ? Colors.white
+                                                          : Color(0xFF8888e1),
+                                                    ),
+                                                  ),
+                                                  jobContorller
+                                                              .jobs_category[
+                                                                  index]
+                                                              .totalJobs !=
+                                                          0
+                                                      ? Container(
+                                                          padding: EdgeInsets
+                                                              .symmetric(
+                                                                  horizontal:
+                                                                      5),
+                                                          decoration:
+                                                              BoxDecoration(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        7),
+                                                            color: Colors.red,
+                                                          ),
+                                                          child: Text(
+                                                            jobContorller
+                                                                .jobs_category[
+                                                                    index]
+                                                                .totalJobs
+                                                                .toString(),
+                                                            style: TextStyle(
+                                                                color: Colors
+                                                                    .white,
+                                                                fontSize: 13),
+                                                          ),
+                                                        )
+                                                      : Container(),
+                                                ],
+                                              )
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    )
+                                  ],
+                                );
+                        }),
+                  ),
+                  Container(
+                    margin: EdgeInsets.symmetric(horizontal: 5),
+                    padding: EdgeInsets.only(top: 4),
+                    height: (MediaQuery.of(context).size.height) - 165,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.vertical(
+                        top: Radius.circular(25),
+                      ),
+                    ),
+                    child: jobContorller.isLoaded == false
+                        ? SpinKitDoubleBounce(
+                            color: primary.color,
+                          )
+                        : jobContorller.jobs_list.length == 0
+                            ? Container(
+                                height: double.infinity,
+                                width: double.infinity,
+                                color: Colors.white,
+                                child: Column(
+                                  children: [
+                                    Container(
+                                      margin: EdgeInsets.only(top: 20),
+                                      height: 350,
+                                      width: double.infinity,
+                                      decoration: BoxDecoration(
+                                          color: Colors.white,
+                                          image: DecorationImage(
+                                            image: AssetImage(
+                                                'assets/images/search.gif'),
+                                          )),
+                                    ),
+                                    Text(
+                                      'Jobs is Not Found!',
+                                      style: TextStyle(
+                                        color: primary.color,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                      textAlign: TextAlign.center,
+                                    )
                                   ],
                                 ),
-                              );
-                        // ignore: dead_code
-                      }),
-                ),
-                Container(
-                  height: MediaQuery.of(context).size.height / 1.37,
-                  child: jobContorller.isLoaded == false
-                      ? SpinKitDoubleBounce(
-                          color: primary.color,
-                        )
-                      : jobContorller.jobs_list.length == 0
-                          ? Container(
-                              height: double.infinity,
-                              width: double.infinity,
-                              color: Colors.white,
-                              child: Column(
-                                children: [
-                                  Container(
-                                    margin: EdgeInsets.only(top: 15),
-                                    height: 350,
-                                    width: double.infinity,
-                                    decoration: BoxDecoration(
-                                        color: Colors.white,
-                                        image: DecorationImage(
-                                          image: AssetImage(
-                                              'assets/images/search.gif'),
-                                        )),
-                                  ),
-                                  Text(
-                                    'Jobs is Not Found!',
-                                    style: TextStyle(
-                                      color: primary.color,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                    textAlign: TextAlign.center,
-                                  )
-                                ],
-                              ),
-                            )
-                          : JobsList(jobs_list: jobContorller.jobs_list),
-                )
-              ],
+                              )
+                            : JobsList(jobs_list: jobContorller.jobs_list),
+                  )
+                ],
+              ),
             ),
     );
   }
